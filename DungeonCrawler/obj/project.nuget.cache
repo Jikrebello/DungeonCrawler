@@ -1,0 +1,15 @@
+{
+  "version": 2,
+  "dgSpecHash": "rudWCD86XoNfTeVR0IfmESj6Vjqjw6EwFVlVe9WwCufQQQ8HsHNG5fO5zXwnboI9CxaGHY82TBnclUqHq8yftA==",
+  "success": true,
+  "projectFilePath": "E:\\C# Projects\\DungeonCrawler\\DungeonCrawler\\DungeonCrawler.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\James\\.nuget\\packages\\csfml\\2.5.0\\csfml.2.5.0.nupkg.sha512",
+    "C:\\Users\\James\\.nuget\\packages\\sfml.audio\\2.5.0\\sfml.audio.2.5.0.nupkg.sha512",
+    "C:\\Users\\James\\.nuget\\packages\\sfml.graphics\\2.5.0\\sfml.graphics.2.5.0.nupkg.sha512",
+    "C:\\Users\\James\\.nuget\\packages\\sfml.net\\2.5.0\\sfml.net.2.5.0.nupkg.sha512",
+    "C:\\Users\\James\\.nuget\\packages\\sfml.system\\2.5.0\\sfml.system.2.5.0.nupkg.sha512",
+    "C:\\Users\\James\\.nuget\\packages\\sfml.window\\2.5.0\\sfml.window.2.5.0.nupkg.sha512"
+  ],
+  "logs": []
+}
