@@ -8,6 +8,16 @@
 		"cSpell.words": [
 			"SFML",
 			"timestep"
-		]
+		],
+		"editor.tokenColorCustomizations": {
+			"[Material Theme Palenight High Contrast]": {
+				"variables": "#f78c65"
+			}
+		},
+		"editor.semanticTokenColorCustomizations": {
+			"[Material Theme Palenight High Contrast]": {
+				"enabled": true
+			}
+		}
 	}
 }
