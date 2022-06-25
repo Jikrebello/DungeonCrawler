@@ -32,6 +32,11 @@ namespace DungeonCrawler
         /// </summary>
         GAME_STATE gameState;
 
+        public Game(RenderWindow window)
+        {
+            this.window = window;
+        }
+
         /// <summary>
         /// A vector that holds all items within the level.
         /// </summary>

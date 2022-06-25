@@ -19,7 +19,15 @@ namespace DungeonCrawler
         public Torch()
         {
             // Set the sprite
-            int textureID = TextureManager
+            int textureID = TextureManager.AddTexture(
+                filePath: "../Resources/Textures/spr_torch.png"
+            );
+            SetSprite(
+                TextureManager.GetTexture(textureID: textureID),
+                isSmooth: false,
+                frames: 5,
+                frameSpeed: 12
+            );
         }
 
         public override void Update(float _deltaTime)

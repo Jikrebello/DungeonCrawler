@@ -51,7 +51,7 @@ namespace DungeonCrawler
 
         public Item()
         {
-            font = new Font(filename: "../Textures/fonts/ADDSBP__.TTF");
+            font = new Font(filename: "../Resources/fonts/ADDSBP__.TTF");
         }
 
         /// <summary>

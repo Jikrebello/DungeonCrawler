@@ -105,48 +105,51 @@ namespace DungeonCrawler
         /// <param name="frames">The number of frames in the sprite. Defaults to 1.</param>
         /// <param name="frameSpeed">The speed that the animation plays at. Defaults to 0.</param>
         /// <returns></returns>
-        public Sprite this[Texture texture, bool isSmooth, int frames = 1, int frameSpeed = 0]
+        internal bool SetSprite(Texture texture, bool isSmooth, int frames = 1, int frameSpeed = 0)
         {
-            get { return _sprite; }
-            set
+            // Create a sprite from the loaded texture.
+            _sprite.Texture = texture;
+
+            // Set animation speed.
+            _animationSpeed = frameSpeed;
+
+            // Store the number of frames.
+            FrameCount = frames;
+
+            // Calculate frame dimensions.
+            Vector2u textureSize = _sprite.Texture.Size;
+            _frameWidth = Convert.ToInt32(value: textureSize.X) / FrameCount;
+            _frameHeight = Convert.ToInt32(value: textureSize.Y);
+
+            // Check if animated or static
+            if (frames > 1)
             {
-                // Create a sprite from the loaded texture.
-                _sprite.Texture = texture;
+                // Set sprite as animated
+                _animated = true;
 
-                // Set animation speed.
-                _animationSpeed = frameSpeed;
-
-                // Store the number of frames.
-                FrameCount = frames;
-
-                // Calculate frame dimensions.
-                Vector2u textureSize = _sprite.Texture.Size;
-                _frameWidth = Convert.ToInt32(value: textureSize.X) / FrameCount;
-                _frameHeight = Convert.ToInt32(value: textureSize.Y);
-
-                // Check if animated or static
-                if (frames > 1)
-                {
-                    // Set sprite as animated
-                    _animated = true;
-
-                    // Set the texture rect of the first frame
-                    _sprite.TextureRect = new IntRect(
-                        left: 0,
-                        top: 0,
-                        width: _frameWidth,
-                        height: _frameHeight
-                    );
-                }
-                else
-                {
-                    // Set the sprite as non animated
-                    _animated = false;
-                }
-
-                // Set up the origin of the sprite
-                _sprite.Origin = new Vector2f(x: _frameWidth / 2f, y: _frameHeight / 2f);
+                // Set the texture rect of the first frame
+                _sprite.TextureRect = new IntRect(
+                    left: 0,
+                    top: 0,
+                    width: _frameWidth,
+                    height: _frameHeight
+                );
             }
+            else
+            {
+                // Set the sprite as non animated
+                _animated = false;
+            }
+
+            // Set up the origin of the sprite
+            _sprite.Origin = new Vector2f(x: _frameWidth / 2f, y: _frameHeight / 2f);
+
+            return true;
+        }
+
+        internal Sprite GetSprite()
+        {
+            return _sprite;
         }
 
         /// <summary>
