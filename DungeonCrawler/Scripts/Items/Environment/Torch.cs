@@ -1,6 +1,6 @@
 namespace DungeonCrawler
 {
-    class Torch : Object
+    public class Torch : Object
     {
         Random _numberGen;
         int _randNum;
@@ -23,7 +23,7 @@ namespace DungeonCrawler
                 filePath: "../Resources/Textures/spr_torch.png"
             );
             SetSprite(
-                TextureManager.GetTexture(textureID: textureID),
+                texture: TextureManager.GetTexture(textureID: textureID),
                 isSmooth: false,
                 frames: 5,
                 frameSpeed: 12
