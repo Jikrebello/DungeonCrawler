@@ -54,7 +54,7 @@ namespace DungeonCrawler
                 else
                 {
                     // set the texture of the rect of the first frame
-                    _sprite.TextureRect = new IntRect(
+                    sprite.TextureRect = new IntRect(
                         left: 0,
                         top: 0,
                         width: _frameWidth,
@@ -86,14 +86,14 @@ namespace DungeonCrawler
             {
                 _position.X = value.X;
                 _position.Y = value.Y;
-                _sprite.Position = new Vector2f(x: value.X, y: value.Y);
+                sprite.Position = new Vector2f(x: value.X, y: value.Y);
             }
         }
 
         /// <summary>
         /// The object's sprite.
         /// </summary>
-        Sprite _sprite;
+        internal Sprite sprite;
 
         /// <summary>
         /// Creates and sets the object sprite.
@@ -108,7 +108,7 @@ namespace DungeonCrawler
         internal bool SetSprite(Texture texture, bool isSmooth, int frames = 1, int frameSpeed = 0)
         {
             // Create a sprite from the loaded texture.
-            _sprite.Texture = texture;
+            sprite.Texture = texture;
 
             // Set animation speed.
             _animationSpeed = frameSpeed;
@@ -117,7 +117,7 @@ namespace DungeonCrawler
             FrameCount = frames;
 
             // Calculate frame dimensions.
-            Vector2u textureSize = _sprite.Texture.Size;
+            Vector2u textureSize = sprite.Texture.Size;
             _frameWidth = Convert.ToInt32(value: textureSize.X) / FrameCount;
             _frameHeight = Convert.ToInt32(value: textureSize.Y);
 
@@ -128,7 +128,7 @@ namespace DungeonCrawler
                 _animated = true;
 
                 // Set the texture rect of the first frame
-                _sprite.TextureRect = new IntRect(
+                sprite.TextureRect = new IntRect(
                     left: 0,
                     top: 0,
                     width: _frameWidth,
@@ -142,14 +142,14 @@ namespace DungeonCrawler
             }
 
             // Set up the origin of the sprite
-            _sprite.Origin = new Vector2f(x: _frameWidth / 2f, y: _frameHeight / 2f);
+            sprite.Origin = new Vector2f(x: _frameWidth / 2f, y: _frameHeight / 2f);
 
             return true;
         }
 
         internal Sprite GetSprite()
         {
-            return _sprite;
+            return sprite;
         }
 
         /// <summary>
@@ -193,7 +193,7 @@ namespace DungeonCrawler
                     this._deltaTime = 0;
                 }
             }
-            _window.Draw(drawable: _sprite);
+            _window.Draw(drawable: sprite);
         }
 
         /// <summary>
@@ -212,7 +212,7 @@ namespace DungeonCrawler
             }
 
             // update the texture rect
-            _sprite.TextureRect = new IntRect(
+            sprite.TextureRect = new IntRect(
                 left: _frameWidth * _currentFrame,
                 top: 0,
                 width: _frameWidth,
