@@ -88,4 +88,17 @@ namespace DungeonCrawler
         UI,
         Count
     }
+
+    /// <summary>
+    /// An enum denoting all possible input keys.
+    /// </summary>
+    public enum KEY
+    {
+        Key_Left,
+        Key_Right,
+        Key_Up,
+        Key_Down,
+        Key_Attack,
+        Key_Escape
+    }
 }
