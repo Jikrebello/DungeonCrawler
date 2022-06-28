@@ -39,16 +39,16 @@ namespace DungeonCrawler
         /// <summary>
         /// Update the projectile.
         /// </summary>
-        /// <param name="_deltaTime">The time in seconds since the last update.</param>
-        public override void Update(float _deltaTime)
+        /// <param name="deltaTime">The time in seconds since the last update.</param>
+        public override void Update(float deltaTime)
         {
             // Update rotation.
-            sprite.Rotation += 400f * _deltaTime;
+            sprite.Rotation += 400f * deltaTime;
 
             // Update position.
             sprite.Position = new Vector2f(
-                x: sprite.Position.X + (_velocity.X * (500 * _deltaTime)),
-                y: sprite.Position.Y + (_velocity.Y * (500 * _deltaTime))
+                x: sprite.Position.X + (_velocity.X * (500 * deltaTime)),
+                y: sprite.Position.Y + (_velocity.Y * (500 * deltaTime))
             );
             Position = sprite.Position;
         }

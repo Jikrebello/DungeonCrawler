@@ -1,4 +1,3 @@
-using System.Numerics;
 using SFML.Graphics;
 using SFML.System;
 
@@ -159,8 +158,8 @@ namespace DungeonCrawler
         /// <summary>
         /// Override the default Object.Update() function
         /// </summary>
-        /// <param name="_deltaTime">The time that has elapsed since the last update.</param>
-        public override void Update(float _deltaTime)
+        /// <param name="deltaTime">The time that has elapsed since the last update.</param>
+        public override void Update(float deltaTime)
         {
             ANIMATION_STATE animState = (ANIMATION_STATE)currentTextureIndex;
 
@@ -206,7 +205,7 @@ namespace DungeonCrawler
             }
             else
             {
-                // The Character is moving
+                // The Character is moving.
                 if (!Animated)
                 {
                     // Update sprite to walking version.

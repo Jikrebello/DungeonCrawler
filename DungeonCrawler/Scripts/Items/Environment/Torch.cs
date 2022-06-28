@@ -30,7 +30,7 @@ namespace DungeonCrawler
             );
         }
 
-        public override void Update(float _deltaTime)
+        public override void Update(float deltaTime)
         {
             _numberGen = new Random();
             _randNum = _numberGen.Next(minValue: 80, maxValue: 121) / 100;

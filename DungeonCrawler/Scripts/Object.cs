@@ -105,7 +105,12 @@ namespace DungeonCrawler
         /// <param name="frames">The number of frames in the sprite. Defaults to 1.</param>
         /// <param name="frameSpeed">The speed that the animation plays at. Defaults to 0.</param>
         /// <returns></returns>
-        internal bool SetSprite(Texture texture, bool isSmooth, int frames = 1, int frameSpeed = 0)
+        internal bool SetSprite(
+            ref Texture texture,
+            bool isSmooth,
+            int frames = 1,
+            int frameSpeed = 0
+        )
         {
             // Create a sprite from the loaded texture.
             sprite.Texture = texture;
@@ -172,28 +177,28 @@ namespace DungeonCrawler
         /// This is a pure virtual function, and must be implemented by extending classes.
         /// </summary>
         /// <param name="deltaTime">The time elapsed since the last tick in Milliseconds.</param>
-        public virtual void Update(float _deltaTime) { }
+        public virtual void Update(float deltaTime) { }
 
         /// <summary>
         /// Draws the object to the screen at its current position.
         /// </summary>
-        /// <param name="_window">The render window to draw the object to.</param>
-        /// <param name="_deltaTime">The time, in MS, since the last draw call.</param>
-        public virtual void Draw(RenderWindow _window, float _deltaTime)
+        /// <param name="window">The render window to draw the object to.</param>
+        /// <param name="deltaTime">The time, in MS, since the last draw call.</param>
+        public virtual void Draw(RenderWindow window, float deltaTime)
         {
             // Check if the sprite is animated
             if (_animated)
             {
                 // add the elapsed time since the last draw call to the aggregate
-                this._deltaTime += _deltaTime;
+                _deltaTime += deltaTime;
 
-                if (this._deltaTime >= (1 / _animationSpeed))
+                if (_deltaTime >= (1 / _animationSpeed))
                 {
                     NextFrame();
-                    this._deltaTime = 0;
+                    _deltaTime = 0;
                 }
             }
-            _window.Draw(drawable: sprite);
+            window.Draw(drawable: sprite);
         }
 
         /// <summary>

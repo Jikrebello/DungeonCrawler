@@ -61,7 +61,7 @@ namespace DungeonCrawler
         /// <param name="_deltaTime">The font to use when drawing the item name.</param>
         public override void Draw(RenderWindow _window, float _deltaTime)
         {
-            base.Draw(_window: _window, _deltaTime: _deltaTime);
+            base.Draw(window: _window, deltaTime: _deltaTime);
 
             // Draw the item Name.
             text.Position = new Vector2f(
