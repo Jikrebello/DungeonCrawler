@@ -98,7 +98,7 @@ namespace DungeonCrawler
         /// A renderWindow is needed in order for the level to calculate its position.
         /// </summary>
         /// <param name="window">The game window</param>
-        public Level(RenderWindow window)
+        public Level(ref RenderWindow window)
         {
             // Load all Tiles.
             #region tile_floor
@@ -308,7 +308,7 @@ namespace DungeonCrawler
             // Draw all torches.
             foreach (var torch in _torches)
             {
-                torch.Draw(_window: window, _deltaTime: deltaTime);
+                torch.Draw(window: window, deltaTime: deltaTime);
             }
         }
 
@@ -333,7 +333,7 @@ namespace DungeonCrawler
         /// Loads a level from a text file
         /// </summary>
         /// <param name="fileName">The path to the level file to load.</param>
-        /// <returns>True if the level loaded succesfully.</returns>
+        /// <returns>True if the level loaded successfully.</returns>
         public bool LoadLevelFromFile(string fileName)
         {
             var reader = new StreamReader(stream: File.OpenRead(path: fileName));
@@ -544,7 +544,7 @@ namespace DungeonCrawler
 
         /// <param name="tile">The tile to check</param>
         /// <returns>True if the given tile is a floor tile.</returns>
-        public static bool IsFloor(Tile tile)
+        public static bool IsFloor(ref Tile tile)
         {
             return tile.Type == TILE.Floor || tile.Type == TILE.Floor_Alt;
         }
