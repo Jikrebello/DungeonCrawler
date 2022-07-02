@@ -13,3 +13,5 @@ Game game = new(window: window);
 
 // game.Initialize();
 // game.Run();
+
+Console.ReadLine();

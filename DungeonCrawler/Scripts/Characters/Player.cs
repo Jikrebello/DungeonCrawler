@@ -46,7 +46,7 @@ namespace DungeonCrawler
         /// <param name="movement">The movement to check.</param>
         /// <param name="level">A reference to the level object.</param>
         /// <returns>True if the given movement will result in a collision.</returns>
-        bool CausesCollision(Vector2f movement, ref Level level) { }
+        // bool CausesCollision(Vector2f movement, Level level) { }
 
         /// <summary>
         /// Updates the player object.

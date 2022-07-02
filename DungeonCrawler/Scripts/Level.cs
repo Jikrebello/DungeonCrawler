@@ -98,7 +98,7 @@ namespace DungeonCrawler
         /// A renderWindow is needed in order for the level to calculate its position.
         /// </summary>
         /// <param name="window">The game window</param>
-        public Level(ref RenderWindow window)
+        public Level(RenderWindow window)
         {
             // Load all Tiles.
             #region tile_floor

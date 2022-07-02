@@ -106,7 +106,7 @@ namespace DungeonCrawler
         /// <param name="frameSpeed">The speed that the animation plays at. Defaults to 0.</param>
         /// <returns></returns>
         internal bool SetSprite(
-            ref Texture texture,
+            Texture texture,
             bool isSmooth,
             int frames = 1,
             int frameSpeed = 0
