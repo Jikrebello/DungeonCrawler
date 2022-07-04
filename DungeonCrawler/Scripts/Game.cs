@@ -36,12 +36,5 @@ namespace DungeonCrawler
         {
             this.window = window;
         }
-
-        /// <summary>
-        /// A vector that holds all items within the level.
-        /// </summary>
-        // Vector<Item> items = new Vector<Item>();
-
-
     }
 }

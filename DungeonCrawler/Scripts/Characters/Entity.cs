@@ -75,7 +75,7 @@ namespace DungeonCrawler
         /// <summary>
         /// The entities defense stat. Effects damage taken.
         /// </summary>
-        protected int Defence
+        protected int Defense
         {
             get { return _defence; }
             set => _defence = value;
