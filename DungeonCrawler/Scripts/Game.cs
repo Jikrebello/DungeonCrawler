@@ -2,11 +2,13 @@ using SFML.Graphics;
 using SFML.Audio;
 using SFML.System;
 using System.Numerics;
+using SFML.Window;
 
 namespace DungeonCrawler
 {
     public class Game
     {
+        #region Variables
         /// <summary>
         /// Constant for fixed time - step loop. We'll lock it at 60fps.
         /// </summary>
@@ -55,7 +57,7 @@ namespace DungeonCrawler
         /// <summary>
         /// A bool that tracks the running state of the game. It's used in the main loop.
         /// </summary>
-        bool _isRunning;
+        public bool IsRunning { get; set; }
 
         /// <summary>
         /// The main level object. All data and functionally regarding the level lives in this class/object.
@@ -216,6 +218,7 @@ namespace DungeonCrawler
         /// A list of all ui sprites.
         /// </summary>
         List<Sprite> _uiSprites;
+        #endregion
 
         /// <summary>
         /// Constructor.
@@ -224,23 +227,253 @@ namespace DungeonCrawler
         public Game(RenderWindow window)
         {
             _window = window;
+            _gameState = GAME_STATE.Playing;
+            IsRunning = true;
+
+            // Enable VSync.
+            _window.SetVerticalSyncEnabled(enable: true);
+
+            // Hide the mouse cursor.
+            _window.SetMouseCursorVisible(visible: false);
+
+            // Calculate and store the center of the screen.
+            _screenCenter = new Vector2f(x: _window.Size.X / 2f, y: _window.Size.Y / 2f);
+
+            // Create the level object.
+            _level = new Level(window: _window);
+
+            // Create the game font.
+            _font = new Font(filename: "../Resources/fonts/ADDSBP__.TTF");
         }
 
         /// <summary>
         /// Initializes the game object by initializing all objects the main game uses.
         /// </summary>
-        public void Initialize() { }
+        public void Initialize()
+        {
+            // Get the screen size.
+            _screenSize = _window.Size;
+
+            // Load the correct projectile texture.
+            _projectileTextureID = TextureManager.AddTexture(
+                filePath: "../Resources/Textures/projectiles/spr_sword.png"
+            );
+
+            // Initialize the UI.
+            LoadUI();
+
+            // Define the game views.
+            _views[(int)VIEW.Main] = _window.DefaultView;
+            _views[(int)VIEW.Main].Zoom(factor: 0.5f);
+            _views[(int)VIEW.UI] = _window.DefaultView;
+
+            // Load the level.
+            _level.LoadLevelFromFile(fileName: "../Resources/data/level_data.txt");
+
+            // Set the position of the player.
+            _player.Position = new Vector2f(x: _screenCenter.X + 197f, y: _screenCenter.Y + 410f);
+
+            // Populate the level.
+            PopulateLevel();
+        }
+
+        /// <summary>
+        /// Loads and prepares all UI assets.
+        /// </summary>
+        void LoadUI()
+        {
+            // Initialize the player UI Texture and sprite.
+            _playerUISprite = new Sprite
+            {
+                Texture = TextureManager.GetTexture(
+                    textureID: TextureManager.AddTexture(
+                        filePath: "../Resources/Textures/ui/spr_warrior_ui.png"
+                    )
+                ),
+                Position = new Vector2f(x: 45f, y: 45f),
+                Origin = new Vector2f(x: 30f, y: 30f)
+            };
+            _uiSprites.Add(item: _playerUISprite);
+
+            // Bar outlines.
+            Texture barOutlineTexture = TextureManager.GetTexture(
+                textureID: TextureManager.AddTexture(
+                    filePath: "../Resources/Textures/ui/spr_bar_outline.png"
+                )
+            );
+            Vector2f barOutlineTextureOrigin =
+                new(x: barOutlineTexture.Size.X / 2f, y: barOutlineTexture.Size.Y / 2f);
+
+            _healthBarOutlineSprite = new Sprite
+            {
+                Texture = barOutlineTexture,
+                Position = new Vector2f(x: 205f, y: 35f),
+                Origin = new Vector2f(x: barOutlineTextureOrigin.X, y: barOutlineTextureOrigin.Y)
+            };
+            _uiSprites.Add(item: _healthBarOutlineSprite);
+
+            _manaBarOutlineSprite = new Sprite
+            {
+                Texture = barOutlineTexture,
+                Position = new Vector2f(x: 205f, y: 55f),
+                Origin = new Vector2f(x: barOutlineTextureOrigin.X, y: barOutlineTextureOrigin.Y)
+            };
+            _uiSprites.Add(item: _manaBarOutlineSprite);
+
+            // Bars.
+            Texture healthBarTexture = TextureManager.GetTexture(
+                textureID: TextureManager.AddTexture(
+                    filePath: "../Resources/Textures/ui/spr_health_bar.png"
+                )
+            );
+            Vector2f barTextureOrigin =
+                new(x: healthBarTexture.Size.X / 2f, y: healthBarTexture.Size.Y / 2f);
+
+            // Health Bar.
+            _healthBarSprite = new Sprite
+            {
+                Texture = healthBarTexture,
+                Position = new Vector2f(x: 205f, y: 35f),
+                Origin = new Vector2f(x: barTextureOrigin.X, y: barOutlineTextureOrigin.Y)
+            };
+
+            // Mana Bar.
+            _manaBarSprite = new Sprite
+            {
+                Texture = TextureManager.GetTexture(
+                    textureID: TextureManager.AddTexture(
+                        filePath: "../Resources/Textures/ui/spr_mana_bar.png"
+                    )
+                ),
+                Position = new Vector2f(x: 205f, y: 55f),
+                Origin = new Vector2f(x: barOutlineTextureOrigin.X, y: barOutlineTextureOrigin.Y)
+            };
+
+            // Initialize the gem UI sprites.
+            _gemUISprite = new Sprite
+            {
+                Texture = TextureManager.GetTexture(
+                    textureID: TextureManager.AddTexture(filePath: "../")
+                ),
+                Position = new Vector2f(x: _screenCenter.X - 260f, y: 50f),
+                Origin = new Vector2f(x: 42f, y: 36f)
+            };
+            _uiSprites.Add(item: _gemUISprite);
+
+            // Initialize the coin UI sprites.
+            _coinUISprite = new Sprite
+            {
+                Texture = TextureManager.GetTexture(
+                    textureID: TextureManager.AddTexture(filePath: "../")
+                ),
+                Position = new Vector2f(x: _screenCenter.X + 60f, y: 50f),
+                Origin = new Vector2f(x: 48f, y: 24f)
+            };
+            _uiSprites.Add(item: _coinUISprite);
+
+            // Key pickup sprite.
+            _keyUISprite = new Sprite
+            {
+                Texture = TextureManager.GetTexture(
+                    textureID: TextureManager.AddTexture(filePath: "../")
+                ),
+                Position = new Vector2f(x: _screenSize.X - 120f, y: _screenSize.Y - 70f),
+                Origin = new Vector2f(x: 90f, y: 45f),
+                Color = new Color(red: 255, green: 255, blue: 255, alpha: 60)
+            };
+            _uiSprites.Add(item: _keyUISprite);
+
+            // Load attack stats.
+            _attackStatTextureIDs[0] = TextureManager.AddTexture(filePath: "../");
+            _attackStatTextureIDs[1] = TextureManager.AddTexture(filePath: "../");
+
+            _attackStatSprite = new Sprite
+            {
+                Texture = TextureManager.GetTexture(textureID: _attackStatTextureIDs[0]),
+                Position = new Vector2f(x: _screenCenter.X - 270f, y: _screenCenter.Y - 30f),
+                Origin = new Vector2f(x: 16f, y: 16f)
+            };
+            _uiSprites.Add(item: _attackStatSprite);
+
+            // Load defense stats.
+            _defenseStatTextureIDs[0] = TextureManager.AddTexture(filePath: "../");
+            _defenseStatTextureIDs[1] = TextureManager.AddTexture(filePath: "../");
+
+            _defenseStatSprite = new Sprite
+            {
+                Texture = TextureManager.GetTexture(textureID: _defenseStatTextureIDs[0]),
+                Position = new Vector2f(x: _screenCenter.X - 150f, y: _screenCenter.Y - 30f),
+                Origin = new Vector2f(x: 16f, y: 16f)
+            };
+            _uiSprites.Add(item: _defenseStatSprite);
+
+            // Load strength stats.
+            _strengthStatTextureIDs[0] = TextureManager.AddTexture(filePath: "../");
+            _strengthStatTextureIDs[1] = TextureManager.AddTexture(filePath: "../");
+
+            _strengthStatSprite = new Sprite
+            {
+                Texture = TextureManager.GetTexture(textureID: _strengthStatTextureIDs[0]),
+                Position = new Vector2f(x: _screenCenter.X - 30f, y: _screenCenter.Y - 30f),
+                Origin = new Vector2f(x: 22f, y: 12f)
+            };
+            _uiSprites.Add(item: _strengthStatSprite);
+
+            // Load dexterity stats.
+            _dexterityStatTextureIDs[0] = TextureManager.AddTexture(filePath: "../");
+            _dexterityStatTextureIDs[1] = TextureManager.AddTexture(filePath: "../");
+
+            _dexterityStatSprite = new Sprite
+            {
+                Texture = TextureManager.GetTexture(textureID: _dexterityStatTextureIDs[0]),
+                Position = new Vector2f(x: _screenCenter.X - 90f, y: _screenCenter.Y - 30f),
+                Origin = new Vector2f(x: 16f, y: 16f)
+            };
+            _uiSprites.Add(item: _dexterityStatSprite);
+
+            // Load stamina stats.
+            _staminaStatTextureIDs[0] = TextureManager.AddTexture(filePath: "../");
+            _staminaStatTextureIDs[1] = TextureManager.AddTexture(filePath: "../");
+
+            _staminaStatSprite = new Sprite
+            {
+                Texture = TextureManager.GetTexture(textureID: _staminaStatTextureIDs[0]),
+                Position = new Vector2f(x: _screenCenter.X - 210f, y: _screenCenter.Y - 30f),
+                Origin = new Vector2f(x: 16f, y: 16f)
+            };
+            _uiSprites.Add(item: _staminaStatSprite);
+        }
+
+        /// <summary>
+        /// Populates the current game room with items and enemies.
+        /// </summary>
+        void PopulateLevel()
+        {
+            // Create a gold object.
+            var gold = new Gold
+            {
+                // Set the gold position.
+                Position = new Vector2f(x: _screenCenter.X - 50f, y: _screenCenter.Y)
+            };
+
+            // Add the gold item to our collection of all object.
+            _items.Add(item: gold);
+        }
 
         /// <summary>
         /// The main game loop. This loop in turn updates the game, and draws all objects to screen.
         /// </summary>
-        public void Run() { }
+        public void Run()
+        {
+            float currentTime = _timestepClock.Restart().AsSeconds();
+            float deltaTime = 0f;
 
-        /// <summary>
-        /// Returns true if the game is currently running.
-        /// </summary>
-        /// <returns>True if the game is running.</returns>
-        public bool IsRunning() { }
+            // Loop until there is quite message from the window or the user pressed escape.
+            while (IsRunning)
+            {
+                // Check if the game was closed.
+            }
+        }
 
         /// <summary>
         /// The main update loop. This loop in turns calls the update loops of all game objects.
@@ -253,16 +486,6 @@ namespace DungeonCrawler
         /// </summary>
         /// <param name="deltaTime">The time, in MS, since the last draw call.</param>
         public void Draw(float deltaTime) { }
-
-        /// <summary>
-        /// Populates the current game room with items and enemies.
-        /// </summary>
-        void PopulateLevel() { }
-
-        /// <summary>
-        /// Loads all sprites needed for the UI.
-        /// </summary>
-        void LoadUI() { }
 
         /// <summary>
         /// Calculates the distance between two points
@@ -283,7 +506,45 @@ namespace DungeonCrawler
         /// <summary>
         /// Constructs the grid of sprites that are used to draw the game light system.
         /// </summary>
-        void ConstructLightGrid() { }
+        void ConstructLightGrid()
+        {
+            // Load the light tile texture and store a reference.
+            int textureID = TextureManager.AddTexture(filePath: "../");
+            var lightTexture = TextureManager.GetTexture(textureID: textureID);
+
+            // Calculate the number of tiles in the grid. Each light tile is 25px square.
+            IntRect levelArea;
+
+            // Define the bounds of the level.
+            levelArea.Left = (int)_level.GetPosition().X;
+            levelArea.Top = (int)_level.GetPosition().Y;
+            levelArea.Width = _level.GetSize().X * _level.GetTileSize();
+            levelArea.Height = _level.GetSize().Y * _level.GetTileSize();
+
+            int width,
+                height,
+                lightTotal;
+
+            width = levelArea.Width / 25;
+            height = levelArea.Height / 25;
+
+            lightTotal = width * height;
+
+            // Create all tiles.
+            for (int i = 0; i < lightTotal; i++)
+            {
+                // Create the tile.
+                Sprite lightSprite = new Sprite
+                {
+                    Texture = lightTexture,
+                    Position = new Vector2f(
+                        x: levelArea.Left + i % width * 25,
+                        y: levelArea.Top + i / width * 25
+                    )
+                };
+                _lightGrid.Add(item: lightSprite);
+            }
+        }
 
         /// <summary>
         /// Updates the level light.

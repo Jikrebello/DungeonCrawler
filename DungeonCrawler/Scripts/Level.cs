@@ -23,6 +23,7 @@ namespace DungeonCrawler
 
     public class Level
     {
+        #region Variables
         /// <summary>
         /// A 2D array that describes the level data.
         /// The type is Tile, which holds a sprite and an index.
@@ -88,6 +89,7 @@ namespace DungeonCrawler
         /// The width and height of each tile in pixels.
         /// </summary>
         public const int TILE_SIZE = 50;
+        #endregion
 
         /// <summary>
         /// Default constructor.
@@ -482,7 +484,7 @@ namespace DungeonCrawler
         /// <param name="column">The column that the tile is in.</param>
         /// <param name="row">The column that the row is in.</param>
         /// <returns>True if the tile is valid.</returns>
-        public static bool TileIsValid(int column, int row)
+        public bool TileIsValid(int column, int row)
         {
             bool validColumn,
                 validRow;
@@ -509,7 +511,7 @@ namespace DungeonCrawler
         /// Gets the size of the level in terms of tiles.
         /// </summary>
         /// <returns>The size of the level grid.</returns>
-        public static Vector2i GetSize()
+        public Vector2i GetSize()
         {
             return new(x: GRID_WIDTH, y: GRID_HEIGHT);
         }
@@ -544,13 +546,13 @@ namespace DungeonCrawler
 
         /// <param name="tile">The tile to check</param>
         /// <returns>True if the given tile is a floor tile.</returns>
-        public static bool IsFloor(ref Tile tile)
+        public bool IsFloor(ref Tile tile)
         {
             return tile.Type == TILE.Floor || tile.Type == TILE.Floor_Alt;
         }
 
         /// <returns>The size of the tiles in the level.</returns>
-        public static int GetTileSize()
+        public int GetTileSize()
         {
             return TILE_SIZE;
         }
