@@ -12,7 +12,7 @@ namespace DungeonCrawler
                 filePath: "../Resources/Textures/loot/key/spr_pickup_key.png"
             );
             SetSprite(
-                TextureManager.GetTexture(textureID),
+                texture: TextureManager.GetTexture(textureID: textureID),
                 isSmooth: false,
                 frames: 8,
                 frameSpeed: 12

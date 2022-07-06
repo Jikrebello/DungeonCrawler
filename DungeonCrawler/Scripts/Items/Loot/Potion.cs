@@ -34,8 +34,8 @@ namespace DungeonCrawler
         {
             // Load and set sprite.
             SetSprite(
-                TextureManager.GetTexture(
-                    TextureManager.AddTexture(
+                texture: TextureManager.GetTexture(
+                    textureID: TextureManager.AddTexture(
                         filePath: "../Resources/Textures/loot/potions/spr_potion_stamina.png"
                     )
                 ),

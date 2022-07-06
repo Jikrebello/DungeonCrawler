@@ -11,8 +11,8 @@ namespace DungeonCrawler
         {
             // Set the sprite.
             SetSprite(
-                TextureManager.GetTexture(
-                    TextureManager.AddTexture(
+                texture: TextureManager.GetTexture(
+                    textureID: TextureManager.AddTexture(
                         filePath: "../Resources/Textures/loot/gem/spr_pickup_gem.png"
                     )
                 ),

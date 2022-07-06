@@ -22,7 +22,7 @@ namespace DungeonCrawler
             );
 
             SetSprite(
-                TextureManager.GetTexture(textureID),
+                texture: TextureManager.GetTexture(textureID: textureID),
                 isSmooth: false,
                 frames: 8,
                 frameSpeed: 12

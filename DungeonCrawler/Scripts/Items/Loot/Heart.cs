@@ -14,8 +14,8 @@ namespace DungeonCrawler
         {
             // Set item sprite.
             SetSprite(
-                TextureManager.GetTexture(
-                    TextureManager.AddTexture(
+                texture: TextureManager.GetTexture(
+                    textureID: TextureManager.AddTexture(
                         filePath: "../Resources/Textures/loot/heart/spr_pickup_heart.png"
                     )
                 ),

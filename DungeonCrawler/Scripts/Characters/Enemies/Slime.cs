@@ -35,7 +35,9 @@ namespace DungeonCrawler
 
             // Set the initial sprite.
             SetSprite(
-                TextureManager.GetTexture(textureID: textureIDs[(int)ANIMATION_STATE.Walk_Down]),
+                texture: TextureManager.GetTexture(
+                    textureID: textureIDs[(int)ANIMATION_STATE.Walk_Down]
+                ),
                 isSmooth: false,
                 frames: 8,
                 frameSpeed: 12
