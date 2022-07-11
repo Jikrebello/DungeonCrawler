@@ -3,24 +3,6 @@ using SFML.System;
 
 namespace DungeonCrawler
 {
-    public class Tile
-    {
-        public TILE Type { get; set; }
-        public int ColumnIndex { get; set; }
-        public int RowIndex { get; set; }
-        public Sprite Sprite { get; set; }
-        public int H { get; set; }
-        public int G { get; set; }
-        public int F { get; set; }
-        public Tile ParentNode { get; set; }
-
-        public Tile()
-        {
-            Sprite = new Sprite();
-            ParentNode = new Tile();
-        }
-    }
-
     public class Level
     {
         #region Variables
@@ -28,7 +10,7 @@ namespace DungeonCrawler
         /// A 2D array that describes the level data.
         /// The type is Tile, which holds a sprite and an index.
         /// </summary>
-        Tile[,] _grid = new Tile[GRID_WIDTH, GRID_HEIGHT];
+        Tile[,] _grid;
 
         /// <summary>
         /// A List of all the sprites in the level.
@@ -102,6 +84,8 @@ namespace DungeonCrawler
         /// <param name="window">The game window</param>
         public Level(RenderWindow window)
         {
+            _grid = new Tile[GRID_WIDTH, GRID_HEIGHT];
+
             // Load all Tiles.
             #region tile_floor
             AddTile(
@@ -216,6 +200,7 @@ namespace DungeonCrawler
             {
                 for (int j = 0; j < GRID_HEIGHT; j++)
                 {
+                    _grid[i, j] = new Tile();
                     var cell = _grid[i, j];
                     cell.ColumnIndex = i;
                     cell.RowIndex = j;
@@ -348,18 +333,22 @@ namespace DungeonCrawler
                         for (int i = 0; i < GRID_WIDTH; i++)
                         {
                             // Get the cell that we're working on.
+
                             var cell = _grid[i, j];
 
                             //Read the character. Out of 4 characters we only want 2nd and 3rd.
                             string input = "";
 
-                            reader.Read();
-                            input += reader.Read();
-                            input += reader.Read();
-                            reader.Read();
+                            input += Convert.ToChar(reader.Read());
+                            input += Convert.ToChar(value: reader.Read());
+                            input += Convert.ToChar(value: reader.Read());
+                            input += Convert.ToChar(reader.Read());
+
+                            input = input.TrimStart('[');
+                            input = input.TrimEnd(']');
 
                             // Convert string to int.
-                            int tileID = Convert.ToInt32(value: input);
+                            int tileID = int.Parse(input);
 
                             // Set type, sprite and position.
                             cell.Type = (TILE)tileID;

@@ -85,7 +85,7 @@ namespace DungeonCrawler
         /// <summary>
         /// A list containing all sprites that make up the lighting grid.
         /// </summary>
-        List<Sprite> _lightGrid;
+        List<Sprite> _lightGrid = new List<Sprite>();
 
         /// <summary>
         /// The size of the screen and window.
@@ -215,7 +215,7 @@ namespace DungeonCrawler
         /// <summary>
         /// A list of all ui sprites.
         /// </summary>
-        List<Sprite> _uiSprites;
+        List<Sprite> _uiSprites = new List<Sprite>();
         #endregion
 
         /// <summary>
@@ -354,7 +354,9 @@ namespace DungeonCrawler
             _gemUISprite = new Sprite
             {
                 Texture = TextureManager.GetTexture(
-                    textureID: TextureManager.AddTexture(filePath: "../")
+                    textureID: TextureManager.AddTexture(
+                        filePath: "../Resources/Textures/ui/spr_gem_ui.png"
+                    )
                 ),
                 Position = new Vector2f(x: _screenCenter.X - 260f, y: 50f),
                 Origin = new Vector2f(x: 42f, y: 36f)
@@ -365,7 +367,7 @@ namespace DungeonCrawler
             _coinUISprite = new Sprite
             {
                 Texture = TextureManager.GetTexture(
-                    textureID: TextureManager.AddTexture(filePath: "../")
+                    textureID: TextureManager.AddTexture(filePath: "../Resources/Textures/ui/")
                 ),
                 Position = new Vector2f(x: _screenCenter.X + 60f, y: 50f),
                 Origin = new Vector2f(x: 48f, y: 24f)
@@ -376,7 +378,9 @@ namespace DungeonCrawler
             _keyUISprite = new Sprite
             {
                 Texture = TextureManager.GetTexture(
-                    textureID: TextureManager.AddTexture(filePath: "../")
+                    textureID: TextureManager.AddTexture(
+                        filePath: "../Resources/Textures/ui/spr_key_ui.png"
+                    )
                 ),
                 Position = new Vector2f(x: _screenSize.X - 120f, y: _screenSize.Y - 70f),
                 Origin = new Vector2f(x: 90f, y: 45f),
@@ -385,8 +389,12 @@ namespace DungeonCrawler
             _uiSprites.Add(item: _keyUISprite);
 
             // Load attack stats.
-            _attackStatTextureIDs[0] = TextureManager.AddTexture(filePath: "../");
-            _attackStatTextureIDs[1] = TextureManager.AddTexture(filePath: "../");
+            _attackStatTextureIDs[0] = TextureManager.AddTexture(
+                filePath: "../Resources/Textures/ui/spr_attack_ui.png"
+            );
+            _attackStatTextureIDs[1] = TextureManager.AddTexture(
+                filePath: "../Resources/Textures/ui/spr_attack_ui_alt.png"
+            );
 
             _attackStatSprite = new Sprite
             {
@@ -397,8 +405,12 @@ namespace DungeonCrawler
             _uiSprites.Add(item: _attackStatSprite);
 
             // Load defense stats.
-            _defenseStatTextureIDs[0] = TextureManager.AddTexture(filePath: "../");
-            _defenseStatTextureIDs[1] = TextureManager.AddTexture(filePath: "../");
+            _defenseStatTextureIDs[0] = TextureManager.AddTexture(
+                filePath: "../Resources/Textures/ui/spr_defense_ui.png"
+            );
+            _defenseStatTextureIDs[1] = TextureManager.AddTexture(
+                filePath: "../Resources/Textures/ui/spr_defense_ui_alt.png"
+            );
 
             _defenseStatSprite = new Sprite
             {
@@ -409,8 +421,12 @@ namespace DungeonCrawler
             _uiSprites.Add(item: _defenseStatSprite);
 
             // Load strength stats.
-            _strengthStatTextureIDs[0] = TextureManager.AddTexture(filePath: "../");
-            _strengthStatTextureIDs[1] = TextureManager.AddTexture(filePath: "../");
+            _strengthStatTextureIDs[0] = TextureManager.AddTexture(
+                filePath: "../Resources/Textures/ui/spr_strength_ui.png"
+            );
+            _strengthStatTextureIDs[1] = TextureManager.AddTexture(
+                filePath: "../Resources/Textures/ui/spr_strength_ui_alt.png"
+            );
 
             _strengthStatSprite = new Sprite
             {
@@ -421,8 +437,12 @@ namespace DungeonCrawler
             _uiSprites.Add(item: _strengthStatSprite);
 
             // Load dexterity stats.
-            _dexterityStatTextureIDs[0] = TextureManager.AddTexture(filePath: "../");
-            _dexterityStatTextureIDs[1] = TextureManager.AddTexture(filePath: "../");
+            _dexterityStatTextureIDs[0] = TextureManager.AddTexture(
+                filePath: "../Resources/Textures/ui/spr_dexterity_ui.png"
+            );
+            _dexterityStatTextureIDs[1] = TextureManager.AddTexture(
+                filePath: "../Resources/Textures/ui/spr_dexterity_ui_alt.png"
+            );
 
             _dexterityStatSprite = new Sprite
             {
@@ -433,8 +453,12 @@ namespace DungeonCrawler
             _uiSprites.Add(item: _dexterityStatSprite);
 
             // Load stamina stats.
-            _staminaStatTextureIDs[0] = TextureManager.AddTexture(filePath: "../");
-            _staminaStatTextureIDs[1] = TextureManager.AddTexture(filePath: "../");
+            _staminaStatTextureIDs[0] = TextureManager.AddTexture(
+                filePath: "../Resources/Textures/ui/spr_stamina_ui.png"
+            );
+            _staminaStatTextureIDs[1] = TextureManager.AddTexture(
+                filePath: "../Resources/Textures/ui/spr_stamina_ui_alt.png"
+            );
 
             _staminaStatSprite = new Sprite
             {

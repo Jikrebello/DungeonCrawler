@@ -7,7 +7,8 @@ namespace DungeonCrawler
         /// <summary>
         /// A Dictionary of each texture name with its ID.
         /// </summary>
-        static Dictionary<string, Tuple<int, Texture>> Textures;
+        static Dictionary<string, Tuple<int, Texture>> Textures =
+            new Dictionary<string, Tuple<int, Texture>>();
 
         /// <summary>
         /// The current key value.
