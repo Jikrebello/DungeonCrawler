@@ -8,19 +8,19 @@ namespace DungeonCrawler
         /// <summary>
         /// An array of all texture IDs.
         /// </summary>
-        protected int[] textureIDs = new int[(int)ANIMATION_STATE.Count];
+        public int[] textureIDs = new int[(int)ANIMATION_STATE.Count];
 
         /// <summary>
         /// The index of the current texture.
         /// </summary>
-        protected int currentTextureIndex;
+        public int currentTextureIndex;
 
         int _health;
 
         /// <summary>
         /// The entities current health
         /// </summary>
-        protected int Health
+        public int Health
         {
             get { return _health; }
             set => _health = value;
@@ -31,7 +31,7 @@ namespace DungeonCrawler
         /// <summary>
         /// The entities maximum health.
         /// </summary>
-        protected int MaxHealth
+        public int MaxHealth
         {
             get { return _maxHealth; }
             set => _maxHealth = value;
@@ -42,7 +42,7 @@ namespace DungeonCrawler
         /// <summary>
         /// The entities current mana.
         /// </summary>
-        protected int Mana
+        public int Mana
         {
             get { return _mana; }
             set => _mana = value;
@@ -53,7 +53,7 @@ namespace DungeonCrawler
         /// <summary>
         /// The entities maximum mana.
         /// </summary>
-        protected int MaxMana
+        public int MaxMana
         {
             get { return _maxMana; }
             set => _maxMana = value;
@@ -64,21 +64,21 @@ namespace DungeonCrawler
         /// <summary>
         /// The entities attack stat. Effects damage dealt.
         /// </summary>
-        protected int Attack
+        public int Attack
         {
             get { return _attack; }
             set => _attack = value;
         }
 
-        int _defence;
+        int _defense;
 
         /// <summary>
         /// The entities defense stat. Effects damage taken.
         /// </summary>
-        protected int Defense
+        public int Defense
         {
-            get { return _defence; }
-            set => _defence = value;
+            get { return _defense; }
+            set => _defense = value;
         }
 
         int _strength;
@@ -97,7 +97,7 @@ namespace DungeonCrawler
         /// <summary>
         /// The entities dexterity. Effects movement speed.
         /// </summary>
-        protected int Dexterity
+        public int Dexterity
         {
             get { return _dexterity; }
             set => _dexterity = value;
@@ -108,7 +108,7 @@ namespace DungeonCrawler
         /// <summary>
         /// The entities stamina. Effects health.
         /// </summary>
-        protected int Stamina
+        public int Stamina
         {
             get { return _stamina; }
             set => _stamina = value;
@@ -119,7 +119,7 @@ namespace DungeonCrawler
         /// <summary>
         /// The entities movement speed.
         /// </summary>
-        protected int Speed
+        public int Speed
         {
             get { return _speed; }
             set => _speed = value;
@@ -147,7 +147,7 @@ namespace DungeonCrawler
             _mana = 0;
             _maxMana = 0;
             _attack = 0;
-            _defence = 0;
+            _defense = 0;
             _strength = 0;
             _dexterity = 0;
             _stamina = 0;

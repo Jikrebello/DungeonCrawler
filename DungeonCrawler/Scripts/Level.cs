@@ -484,7 +484,7 @@ namespace DungeonCrawler
         /// <param name="column">The column that the tile is in.</param>
         /// <param name="row">The column that the row is in.</param>
         /// <returns>True if the tile is valid.</returns>
-        public bool TileIsValid(int column, int row)
+        public static bool TileIsValid(int column, int row)
         {
             bool validColumn,
                 validRow;
@@ -511,7 +511,7 @@ namespace DungeonCrawler
         /// Gets the size of the level in terms of tiles.
         /// </summary>
         /// <returns>The size of the level grid.</returns>
-        public Vector2i GetSize()
+        public static Vector2i GetSize()
         {
             return new(x: GRID_WIDTH, y: GRID_HEIGHT);
         }
@@ -520,7 +520,7 @@ namespace DungeonCrawler
         /// Spawns a given number of torches in the level.
         /// </summary>
         /// <param name="torchCount">The number of torches to create.</param>
-        public void SpawnTorches(int torchCount) { }
+        public static void SpawnTorches(int torchCount) { }
 
         /// <summary>
         /// Unlocks the door in the level.
@@ -546,13 +546,13 @@ namespace DungeonCrawler
 
         /// <param name="tile">The tile to check</param>
         /// <returns>True if the given tile is a floor tile.</returns>
-        public bool IsFloor(ref Tile tile)
+        public static bool IsFloor(ref Tile tile)
         {
             return tile.Type == TILE.Floor || tile.Type == TILE.Floor_Alt;
         }
 
         /// <returns>The size of the tiles in the level.</returns>
-        public int GetTileSize()
+        public static int GetTileSize()
         {
             return TILE_SIZE;
         }

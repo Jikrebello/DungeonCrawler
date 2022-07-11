@@ -6,12 +6,12 @@ using SFML.Window;
 var random = new Random(Seed: 42);
 
 // Create the main game object.
-// RenderWindow window =
-//     new(mode: VideoMode.DesktopMode, title: "Dungeon Crawler", style: Styles.Fullscreen);
+RenderWindow window =
+    new(mode: VideoMode.DesktopMode, title: "Dungeon Crawler", style: Styles.Fullscreen);
 
-// Game game = new(window: window);
+Game game = new(window: window);
 
-// game.Initialize();
-// game.Run();
+game.Initialize();
+game.Run();
 
 Console.ReadLine();

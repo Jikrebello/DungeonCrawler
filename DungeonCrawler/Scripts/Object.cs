@@ -104,13 +104,7 @@ namespace DungeonCrawler
         /// <param name="texture">The path to the resource that you wish to load, relative to the project.</param>
         /// <param name="frames">The number of frames in the sprite. Defaults to 1.</param>
         /// <param name="frameSpeed">The speed that the animation plays at. Defaults to 0.</param>
-        /// <returns></returns>
-        internal bool SetSprite(
-            Texture texture,
-            bool isSmooth,
-            int frames = 1,
-            int frameSpeed = 0
-        )
+        internal bool SetSprite(Texture texture, bool isSmooth, int frames = 1, int frameSpeed = 0)
         {
             // Create a sprite from the loaded texture.
             sprite.Texture = texture;
@@ -158,7 +152,7 @@ namespace DungeonCrawler
         }
 
         /// <summary>
-        ///Default constructor.
+        /// Default constructor.
         /// </summary>
         public Object()
         {
