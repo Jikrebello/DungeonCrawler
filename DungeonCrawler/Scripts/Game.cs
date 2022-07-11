@@ -1,7 +1,5 @@
 using SFML.Graphics;
-using SFML.Audio;
 using SFML.System;
-using System.Numerics;
 using SFML.Window;
 
 namespace DungeonCrawler
@@ -12,12 +10,12 @@ namespace DungeonCrawler
         /// <summary>
         /// Constant for fixed time - step loop. We'll lock it at 60fps.
         /// </summary>
-        static float FPS = 60f;
+        static readonly float FPS = 60f;
 
         /// <summary>
         /// Roughly (0.017) @ 60fps.
         /// </summary>
-        static float MS_PER_STEP = 1f / FPS;
+        static readonly float MS_PER_STEP = 1f / FPS;
 
         /// <summary>
         /// The main application window.
@@ -107,7 +105,7 @@ namespace DungeonCrawler
         /// <summary>
         /// The amount of gold that the player currently has.
         /// </summary>
-        int _goldScore;
+        int _goldTotal;
 
         /// <summary>
         /// The sprite that shows the player class in the UI.
@@ -261,6 +259,9 @@ namespace DungeonCrawler
 
             // Initialize the UI.
             LoadUI();
+
+            // Builds the light grid.
+            ConstructLightGrid();
 
             // Define the game views.
             _views[(int)VIEW.Main] = _window.DefaultView;
@@ -460,6 +461,14 @@ namespace DungeonCrawler
             _items.Add(item: gold);
         }
 
+        void KeyPressed(object sender, KeyEventArgs e)
+        {
+            if (e.Code == Keyboard.Key.Escape)
+            {
+                _window.Close();
+            }
+        }
+
         /// <summary>
         /// The main game loop. This loop in turn updates the game, and draws all objects to screen.
         /// </summary>
@@ -468,10 +477,30 @@ namespace DungeonCrawler
             float currentTime = _timestepClock.Restart().AsSeconds();
             float deltaTime = 0f;
 
-            // Loop until there is quite message from the window or the user pressed escape.
-            while (IsRunning)
+            _window.Closed += (sender, args) => _window.Close();
+            _window.KeyPressed += KeyPressed;
+
+            while (_window.IsOpen)
             {
-                // Check if the game was closed.
+                float newTime = _timestepClock.ElapsedTime.AsSeconds();
+                deltaTime = Math.Max(val1: 0f, val2: newTime - currentTime);
+                currentTime = newTime;
+
+                if (!_levelWasGenerated)
+                {
+                    Update(deltaTime: deltaTime);
+
+                    Draw(deltaTime: deltaTime);
+                }
+                else
+                {
+                    _levelWasGenerated = false;
+                }
+
+                _window.DispatchEvents();
+                _window.Clear();
+
+                _window.Display();
             }
         }
 
@@ -479,13 +508,244 @@ namespace DungeonCrawler
         /// The main update loop. This loop in turns calls the update loops of all game objects.
         /// </summary>
         /// <param name="deltaTime">The time, in MS, since the last update call.</param>
-        public void Update(float deltaTime) { }
+        public void Update(float deltaTime)
+        {
+            // Check what state the game is in.
+            switch (_gameState)
+            {
+                case GAME_STATE.Main_Menu:
+                    // Main Menu code.
+                    break;
+
+                case GAME_STATE.Playing:
+
+                    // First check if the player is at the exit. If so theres no need to update anything.
+                    Tile playerTile = _level.GetTile(position: _player.Position);
+
+                    if (playerTile.Type == TILE.Wall_Door_Unlocked)
+                    {
+                        // ...
+                    }
+                    else
+                    {
+                        // Update the player.
+                        _player.Update(deltaTime: deltaTime, level: ref _level);
+
+                        // Store the player position as it's used many times.
+                        Vector2f playerPosition = _player.Position;
+
+                        if (_player.IsAttacking())
+                        {
+                            if (_player.Mana >= 2)
+                            {
+                                Vector2f target =
+                                    new(x: Mouse.GetPosition().X, y: Mouse.GetPosition().Y);
+                                Projectile projectile =
+                                    new(
+                                        texture: TextureManager.GetTexture(
+                                            textureID: _projectileTextureID
+                                        ),
+                                        origin: playerPosition,
+                                        screenCenter: _screenCenter,
+                                        target: target
+                                    );
+                                _playerProjectiles.Add(item: projectile);
+
+                                // Reduce the players Mana.
+                                _player.Mana -= 2;
+                            }
+                        }
+
+                        // Update all the items.
+                        UpdateItems(playerPosition: playerPosition);
+
+                        // Update level light.
+                        UpdateLight(playerPosition: playerPosition);
+
+                        // Update all enemies.
+                        UpdateEnemies(playerPosition: playerPosition, deltaTime: deltaTime);
+
+                        // Update all projectiles.
+                        UpdateProjectiles(deltaTime: deltaTime);
+
+                        // Center the view.
+                        _views[(int)VIEW.Main].Center = playerPosition;
+                    }
+                    break;
+
+                case GAME_STATE.Game_Over:
+                    // Game over code.
+                    break;
+            }
+        }
 
         /// <summary>
         /// Draws all game objects to screen.
         /// </summary>
         /// <param name="deltaTime">The time, in MS, since the last draw call.</param>
-        public void Draw(float deltaTime) { }
+        public void Draw(float deltaTime)
+        {
+            // Clear the screen.
+            _window.Clear(color: new Color(red: 3, green: 3, blue: 3, alpha: 255));
+
+            // Check what state the game is in.
+            switch (_gameState)
+            {
+                case GAME_STATE.Main_Menu:
+                    // Draw Main Menu.
+                    break;
+
+                case GAME_STATE.Playing:
+                    // Set the main game view.
+                    _window.SetView(view: _views[(int)VIEW.Main]);
+
+                    // Draw the level.
+                    _level.Draw(window: _window, deltaTime: deltaTime);
+
+                    // Draw all the objects.
+                    foreach (var item in _items)
+                    {
+                        item.Draw(_window: _window, _deltaTime: deltaTime);
+                    }
+
+                    // Draw for all enemies.
+                    foreach (var enemy in _enemies)
+                    {
+                        enemy.Draw(window: _window, deltaTime: deltaTime);
+                    }
+
+                    // Draw all projectiles.
+                    foreach (var projectile in _playerProjectiles)
+                    {
+                        _window.Draw(drawable: projectile.GetSprite());
+                    }
+
+                    // Draw the player.
+                    _player.Draw(window: _window, deltaTime: deltaTime);
+
+                    // Draw the level light.
+                    foreach (var sprite in _lightGrid)
+                    {
+                        _window.Draw(drawable: sprite);
+                    }
+
+                    // Switch to UI.
+                    _window.SetView(view: _views[(int)VIEW.UI]);
+
+                    // Draw player stats.
+                    DrawString(
+                        text: _player.Attack.ToString(),
+                        position: new Vector2f(x: _screenCenter.X - 210f, y: _screenCenter.Y - 30f),
+                        size: 25
+                    );
+                    DrawString(
+                        text: _player.Defense.ToString(),
+                        position: new Vector2f(x: _screenCenter.X - 90f, y: _screenCenter.Y - 30f),
+                        size: 25
+                    );
+                    DrawString(
+                        text: _player.Strength.ToString(),
+                        position: new Vector2f(x: _screenCenter.X + 30f, y: _screenCenter.Y - 30f),
+                        size: 25
+                    );
+                    DrawString(
+                        text: _player.Dexterity.ToString(),
+                        position: new Vector2f(x: _screenCenter.X + 150f, y: _screenCenter.Y - 30f),
+                        size: 25
+                    );
+                    DrawString(
+                        text: _player.Stamina.ToString(),
+                        position: new Vector2f(x: _screenCenter.X + 270f, y: _screenCenter.Y - 30f),
+                        size: 25
+                    );
+
+                    // Draw player score.
+                    string scoreString;
+
+                    if (_scoreTotal > 99999)
+                        scoreString = _scoreTotal.ToString();
+                    else if (_scoreTotal > 9999)
+                        scoreString = "0" + _scoreTotal;
+                    else if (_scoreTotal > 999)
+                        scoreString = "00" + _scoreTotal;
+                    else if (_scoreTotal > 99)
+                        scoreString = "000" + _scoreTotal;
+                    else if (_scoreTotal > 9)
+                        scoreString = "0000" + _scoreTotal;
+                    else
+                        scoreString = "00000" + _scoreTotal;
+
+                    DrawString(
+                        text: scoreString,
+                        position: new Vector2f(x: _screenCenter.X - 120f, y: 40f),
+                        size: 40
+                    );
+
+                    // Draw gold total.
+                    string goldString;
+
+                    if (_goldTotal > 99999)
+                        goldString = _goldTotal.ToString();
+                    else if (_goldTotal > 9999)
+                        goldString = "0" + _goldTotal;
+                    else if (_goldTotal > 999)
+                        goldString = "00" + _goldTotal;
+                    else if (_goldTotal > 99)
+                        goldString = "000" + _goldTotal;
+                    else if (_goldTotal > 9)
+                        goldString = "0000" + _goldTotal;
+                    else
+                        goldString = "00000" + _goldTotal;
+
+                    DrawString(
+                        text: goldString,
+                        position: new Vector2f(x: _screenCenter.X + 220f, y: 40f),
+                        size: 40
+                    );
+
+                    // Draw rest of the UI.
+                    foreach (var sprite in _uiSprites)
+                    {
+                        _window.Draw(drawable: sprite);
+                    }
+
+                    // Draw the current room and floor.
+                    DrawString(
+                        text: "Floor " + _level.GetFloorNumber(),
+                        position: new Vector2f(x: 70f, y: _screenSize.Y - 65f),
+                        size: 25
+                    );
+                    DrawString(
+                        text: "Room " + _level.GetRoomNumber(),
+                        position: new Vector2f(x: 70f, y: _screenSize.Y - 30f),
+                        size: 25
+                    );
+
+                    // Draw health and mana bars.
+                    _healthBarSprite.TextureRect = new IntRect(
+                        left: 0,
+                        top: 0,
+                        width: (int)(213f / _player.MaxHealth * _player.Health),
+                        height: 8
+                    );
+                    _window.Draw(drawable: _healthBarSprite);
+
+                    _manaBarSprite.TextureRect = new IntRect(
+                        left: 0,
+                        top: 0,
+                        width: (int)(213f / _player.MaxMana * _player.Mana),
+                        height: 8
+                    );
+                    _window.Draw(drawable: _manaBarSprite);
+                    break;
+
+                case GAME_STATE.Game_Over:
+                    // Draw game over screen.
+                    break;
+            }
+            // Present the back-buffer to the screen.
+            _window.Display();
+        }
 
         /// <summary>
         /// Calculates the distance between two points
@@ -493,7 +753,16 @@ namespace DungeonCrawler
         /// <param name="position1">The position of the first point.</param>
         /// <param name="position2">The position of the second item.</param>
         /// <returns>The distance between the two points.</returns>
-        float DistanceBetweenPoints(Vector2f position1, Vector2f position2) { }
+        static float DistanceBetweenPoints(Vector2f position1, Vector2f position2)
+        {
+            return (float)
+                Math.Abs(
+                    value: Math.Sqrt(
+                        d: ((position1.X - position2.X) * (position1.X - position2.X))
+                            + ((position1.Y - position2.Y) * (position1.Y - position2.Y))
+                    )
+                );
+        }
 
         /// <summary>
         /// Draws text at a given location on the screen.
@@ -501,7 +770,21 @@ namespace DungeonCrawler
         /// <param name="text">The string you wish to draw.</param>
         /// <param name="position">The top-left position of the string.</param>
         /// <param name="size">(Optional) The font-size to use. Default value is 10.</param>
-        void DrawString(string text, Vector2f position, uint size = 10);
+        void DrawString(string text, Vector2f position, uint size = 10)
+        {
+            // Clear the old data.
+            _text.DisplayedString = "";
+
+            _text.DisplayedString = text;
+            _text.Font = _font;
+            _text.CharacterSize = size;
+            _text.Position = new Vector2f(
+                x: position.X - (_text.GetLocalBounds().Width / 2f),
+                y: position.Y - (_text.GetLocalBounds().Height / 2f)
+            );
+
+            _window.Draw(drawable: _text);
+        }
 
         /// <summary>
         /// Constructs the grid of sprites that are used to draw the game light system.
@@ -518,8 +801,8 @@ namespace DungeonCrawler
             // Define the bounds of the level.
             levelArea.Left = (int)_level.GetPosition().X;
             levelArea.Top = (int)_level.GetPosition().Y;
-            levelArea.Width = _level.GetSize().X * _level.GetTileSize();
-            levelArea.Height = _level.GetSize().Y * _level.GetTileSize();
+            levelArea.Width = Level.GetSize().X * Level.GetTileSize();
+            levelArea.Height = Level.GetSize().Y * Level.GetTileSize();
 
             int width,
                 height,
@@ -550,25 +833,268 @@ namespace DungeonCrawler
         /// Updates the level light.
         /// </summary>
         /// <param name="playerPosition">The position of the players within the level.</param>
-        void UpdateLight(Vector2f playerPosition) { }
+        void UpdateLight(Vector2f playerPosition)
+        {
+            foreach (var sprite in _lightGrid)
+            {
+                float tileAlpha = 255f; // Tile alpha.
+
+                // Calculate distance between tile and player.
+                float distance = DistanceBetweenPoints(
+                    position1: sprite.Position,
+                    position2: playerPosition
+                );
+
+                // Calculate tile transparency.
+                if (distance < 200f)
+                {
+                    tileAlpha = 0f;
+                }
+                else if (distance < 250f)
+                {
+                    tileAlpha = 51f * (distance - 200f) / 10f;
+                }
+
+                // Get all the torches from the level.
+                var torches = _level.GetTorches();
+
+                // If there are torches.
+                if (torches != null)
+                {
+                    // Update the light surrounding each torch.
+                    foreach (var torch in torches)
+                    {
+                        // If the light tile is within range of the torch.
+                        distance = DistanceBetweenPoints(
+                            position1: sprite.Position,
+                            position2: torch.Position
+                        );
+                        if (distance < 100f)
+                        {
+                            // Edit its alpha.
+                            tileAlpha -=
+                                (tileAlpha - (tileAlpha / 100f * distance)) * torch.Brightness;
+                        }
+                    }
+
+                    // Ensure alpha does not go negative.
+                    if (tileAlpha < 0)
+                    {
+                        tileAlpha = 0;
+                    }
+                }
+
+                // Set the sprite transparency.
+                sprite.Color = new Color(red: 255, green: 255, blue: 255, alpha: (byte)tileAlpha);
+            }
+        }
 
         /// <summary>
         /// Updates all items in the level.
         /// </summary>
         /// <param name="playerPosition">The position of the players within the level.</param>
-        void UpdateItems(Vector2f playerPosition) { }
+        void UpdateItems(Vector2f playerPosition)
+        {
+            for (int i = _items.Count - 1; i >= 0; i--)
+            {
+                if (
+                    DistanceBetweenPoints(
+                        position1: _items[index: i].Position,
+                        position2: playerPosition
+                    ) < 40f
+                )
+                {
+                    // Check what type of object it is.
+                    switch (_items[index: i].Type)
+                    {
+                        case ITEM.Gold:
+                        {
+                            // Cast item as a gold object so we can access its properties.
+                            Gold gold = _items[index: i] as Gold;
+                            // Add to the gold total.
+                            _goldTotal = gold.GoldValue;
+
+                            // Finally, delete the object.
+                            _items.RemoveAt(index: i);
+                            break;
+                        }
+
+                        case ITEM.Gem:
+                        {
+                            // Cast to a Gem and add to score.
+                            Gem gem = _items[index: i] as Gem;
+                            _scoreTotal = gem.ScoreValue;
+
+                            // Finally, delete the object.
+                            _items.RemoveAt(index: i);
+                            break;
+                        }
+
+                        case ITEM.Key:
+                        {
+                            // Unlock the door.
+                            _level.UnlockDoor();
+                            // Set the key as collected.
+                            _keyUISprite.Color = new Color(color: Color.White);
+
+                            // Finally, delete the object.
+                            _items.RemoveAt(index: i);
+                            break;
+                        }
+
+                        case ITEM.Potion:
+                        {
+                            // ...
+
+                            // Finally, delete the object.
+                            _items.RemoveAt(index: i);
+                            break;
+                        }
+
+                        case ITEM.Heart:
+                        {
+                            // Cast to heart and get health.
+                            Heart heart = _items[index: i] as Heart;
+                            _player.Health += heart.HealthValue;
+
+                            // Finally, delete the object.
+                            _items.RemoveAt(index: i);
+                            break;
+                        }
+                    }
+                }
+            }
+        }
 
         /// <summary>
         /// Updates all enemies in the level.
         /// </summary>
         /// <param name="playerPosition">The position of the players within the level.</param>
-        /// <param name="timeDelta">The amount of time that has passed since the last update.</param>
-        void UpdateEnemies(Vector2f playerPosition, float timeDelta) { }
+        /// <param name="deltaTime">The amount of time that has passed since the last update.</param>
+        void UpdateEnemies(Vector2f playerPosition, float deltaTime)
+        {
+            // Store player tile.
+            var playerTile = _level.GetTile(position: playerPosition);
+
+            var rand = new Random();
+
+            for (int i = _enemies.Count - 1; i >= 0; i--)
+            {
+                // Get the enemy.
+                var enemy = _enemies[index: i];
+
+                // Create a bool so we can check if an enemy was deleted.
+                bool enemyWasDeleted = false;
+
+                //Get the tile that the enemy is on.
+                var enemyTile = _level.GetTile(position: enemy.Position);
+
+                // Check for collisions with projectiles.
+                for (int j = _playerProjectiles.Count - 1; j >= 0; j--)
+                {
+                    var projectile = _playerProjectiles[index: j];
+
+                    // If the enemy and projectile occupy the same tile they have collided.
+                    if (enemyTile == _level.GetTile(position: projectile.Position))
+                    {
+                        // Delete the projectile.
+                        _playerProjectiles.RemoveAt(index: j);
+
+                        // Damage the enemy.
+                        enemy.Damage(damage: 25);
+
+                        // If the enemy is dead remove it.
+                        if (enemy.IsDead())
+                        {
+                            // Get the enemy position.
+                            var enemyPosition = enemy.Position;
+
+                            // Spawn loot.
+                            for (int k = 0; k < 5; k++)
+                            {
+                                enemyPosition.X += rand.Next(minValue: 15, maxValue: 31);
+                                enemyPosition.Y += rand.Next(minValue: 15, maxValue: 31);
+                                var item = new Item();
+
+                                switch (rand.Next(minValue: 0, maxValue: 2))
+                                {
+                                    // Spawn Gold.
+                                    case 0:
+                                        Gold gold = item as Gold;
+                                        gold.Position = enemyPosition;
+                                        _items.Add(item: gold);
+                                        break;
+
+                                    // Spawn Gem.
+                                    case 1:
+                                        Gem gem = item as Gem;
+                                        gem.Position = enemyPosition;
+                                        _items.Add(item: gem);
+                                        break;
+                                }
+                            }
+
+                            // 1 in 5 chance of spawning health.
+                            if (rand.Next(minValue: 0, maxValue: 5) == 0)
+                            {
+                                enemyPosition.X += rand.Next(minValue: 15, maxValue: 31);
+                                enemyPosition.Y += rand.Next(minValue: 15, maxValue: 31);
+                                var heart = new Heart { Position = enemyPosition };
+                                _items.Add(item: heart);
+                            }
+                            // 1 in 5 chance of spawning potion.
+                            else if (rand.Next(minValue: 0, maxValue: 5) == 1)
+                            {
+                                enemyPosition.X += rand.Next(minValue: 15, maxValue: 31);
+                                enemyPosition.Y += rand.Next(minValue: 15, maxValue: 31);
+                                var potion = new Potion { Position = enemyPosition };
+                                _items.Add(item: potion);
+                            }
+
+                            // Delete the enemy.
+                            _enemies.RemoveAt(index: i);
+                            enemyWasDeleted = true;
+                        }
+                    }
+                }
+                // If the enemy was not deleted.
+                if (!enemyWasDeleted)
+                {
+                    enemy.Update(deltaTime: deltaTime);
+                }
+
+                if (enemyTile == playerTile)
+                {
+                    if (_player.CanTakeDamage)
+                    {
+                        _player.Damage(damage: 10);
+                    }
+                }
+            }
+        }
 
         /// <summary>
         /// Updates all projectiles in the level.
         /// </summary>
-        /// <param name="timeDelta">The amount of time that has passed since the last update.</param>
-        void UpdateProjectiles(float timeDelta) { }
+        /// <param name="deltaTime">The amount of time that has passed since the last update.</param>
+        void UpdateProjectiles(float deltaTime)
+        {
+            for (int i = _playerProjectiles.Count - 1; i >= 0; i--)
+            {
+                var projectile = _playerProjectiles[index: i];
+                var projectileTileType = _level.GetTile(position: projectile.Position).Type;
+
+                // If the tile the projectile is on is not the floor, delete it.
+                if (projectileTileType != TILE.Floor && projectileTileType != TILE.Floor_Alt)
+                {
+                    _playerProjectiles.RemoveAt(index: i);
+                }
+                else
+                {
+                    // Update the projectile and move it to the next one.
+                    projectile.Update(deltaTime: deltaTime);
+                }
+            }
+        }
     }
 }
