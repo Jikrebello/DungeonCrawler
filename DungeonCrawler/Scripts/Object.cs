@@ -54,7 +54,7 @@ namespace DungeonCrawler
                 else
                 {
                     // set the texture of the rect of the first frame
-                    sprite.TextureRect = new IntRect(
+                    Sprite.TextureRect = new IntRect(
                         left: 0,
                         top: 0,
                         width: _frameWidth,
@@ -86,14 +86,14 @@ namespace DungeonCrawler
             {
                 _position.X = value.X;
                 _position.Y = value.Y;
-                sprite.Position = new Vector2f(x: value.X, y: value.Y);
+                Sprite.Position = new Vector2f(x: value.X, y: value.Y);
             }
         }
 
         /// <summary>
         /// The object's sprite.
         /// </summary>
-        internal Sprite sprite = new();
+        public Sprite Sprite = new();
 
         /// <summary>
         /// Creates and sets the object sprite.
@@ -104,10 +104,10 @@ namespace DungeonCrawler
         /// <param name="texture">The path to the resource that you wish to load, relative to the project.</param>
         /// <param name="frames">The number of frames in the sprite. Defaults to 1.</param>
         /// <param name="frameSpeed">The speed that the animation plays at. Defaults to 0.</param>
-        internal bool SetSprite(Texture texture, bool isSmooth, int frames = 1, int frameSpeed = 0)
+        public bool SetSprite(Texture texture, bool isSmooth, int frames = 1, int frameSpeed = 0)
         {
             // Create a sprite from the loaded texture.
-            sprite.Texture = texture;
+            Sprite.Texture = texture;
 
             // Set animation speed.
             _animationSpeed = frameSpeed;
@@ -116,7 +116,7 @@ namespace DungeonCrawler
             FrameCount = frames;
 
             // Calculate frame dimensions.
-            Vector2u textureSize = sprite.Texture.Size;
+            Vector2u textureSize = Sprite.Texture.Size;
             _frameWidth = Convert.ToInt32(value: textureSize.X) / FrameCount;
             _frameHeight = Convert.ToInt32(value: textureSize.Y);
 
@@ -127,7 +127,7 @@ namespace DungeonCrawler
                 _animated = true;
 
                 // Set the texture rect of the first frame
-                sprite.TextureRect = new IntRect(
+                Sprite.TextureRect = new IntRect(
                     left: 0,
                     top: 0,
                     width: _frameWidth,
@@ -141,14 +141,14 @@ namespace DungeonCrawler
             }
 
             // Set up the origin of the sprite
-            sprite.Origin = new Vector2f(x: _frameWidth / 2f, y: _frameHeight / 2f);
+            Sprite.Origin = new Vector2f(x: _frameWidth / 2f, y: _frameHeight / 2f);
 
             return true;
         }
 
-        internal Sprite GetSprite()
+        public Sprite GetSprite()
         {
-            return sprite;
+            return Sprite;
         }
 
         /// <summary>
@@ -156,7 +156,7 @@ namespace DungeonCrawler
         /// </summary>
         public Object()
         {
-            _position = new Vector2f(x: 0f, y: 0f);
+            Position = new Vector2f(x: 0f, y: 0f);
             _animationSpeed = 0;
             _animated = false;
             FrameCount = 0;
@@ -192,7 +192,7 @@ namespace DungeonCrawler
                     _deltaTime = 0;
                 }
             }
-            window.Draw(drawable: sprite);
+            window.Draw(drawable: Sprite);
         }
 
         /// <summary>
@@ -211,7 +211,7 @@ namespace DungeonCrawler
             }
 
             // update the texture rect
-            sprite.TextureRect = new IntRect(
+            Sprite.TextureRect = new IntRect(
                 left: _frameWidth * _currentFrame,
                 top: 0,
                 width: _frameWidth,

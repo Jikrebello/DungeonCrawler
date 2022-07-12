@@ -37,7 +37,7 @@ namespace DungeonCrawler
         /// <summary>
         /// A text object storing the name of the item.
         /// </summary>
-        public Text text;
+        public Text text = new Text();
 
         /// <summary>
         /// A font object storing the name of the item.
@@ -51,7 +51,7 @@ namespace DungeonCrawler
 
         public Item()
         {
-            font = new Font(filename: "../Resources/fonts/ADDSBP__.TTF");
+            font = new Font(filename: "Resources/fonts/ADDSBP__.TTF");
         }
 
         /// <summary>
@@ -66,7 +66,7 @@ namespace DungeonCrawler
             // Draw the item Name.
             text.Position = new Vector2f(
                 x: Position.X - textOffset.X,
-                y: (Position.Y - 30f) - textOffset.Y
+                y: Position.Y - 30f - textOffset.Y
             );
 
             _window.Draw(drawable: text);

@@ -18,7 +18,7 @@ namespace DungeonCrawler
 
             // Set the sprite.
             int textureID = TextureManager.AddTexture(
-                filePath: "../Resources/Textures/loot/gold/spr_pickup_gold_medium.png"
+                filePath: "Resources/Textures/loot/gold/spr_pickup_gold_medium.png"
             );
 
             SetSprite(

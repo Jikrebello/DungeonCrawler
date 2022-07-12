@@ -30,7 +30,7 @@ namespace DungeonCrawler
         /// <summary>
         /// Used in the main game time step.
         /// </summary>
-        Clock _timestepClock;
+        Clock _timestepClock = new Clock();
 
         /// <summary>
         /// The default font to be used when drawing text.
@@ -45,12 +45,12 @@ namespace DungeonCrawler
         /// <summary>
         /// A list that holds all items within the level.
         /// </summary>
-        List<Item> _items;
+        List<Item> _items = new List<Item>();
 
         /// <summary>
         /// A list that holds all the enemies within the level.
         /// </summary>
-        List<Enemy> _enemies;
+        List<Enemy> _enemies = new List<Enemy>();
 
         /// <summary>
         /// A bool that tracks the running state of the game. It's used in the main loop.
@@ -65,7 +65,7 @@ namespace DungeonCrawler
         /// <summary>
         /// The main player object. Only one instance of this object should be created at any one time.
         /// </summary>
-        Player _player;
+        Player _player = new();
 
         /// <summary>
         /// String stream used by the DrawText() function.
@@ -80,7 +80,7 @@ namespace DungeonCrawler
         /// <summary>
         /// Text used by the DrawText() function.
         /// </summary>
-        Text _text;
+        Text _text = new Text();
 
         /// <summary>
         /// A list containing all sprites that make up the lighting grid.
@@ -180,7 +180,7 @@ namespace DungeonCrawler
         /// <summary>
         /// A vector of all the player's projectiles.
         /// </summary>
-        List<Projectile> _playerProjectiles;
+        List<Projectile> _playerProjectiles = new List<Projectile>();
 
         /// <summary>
         /// The ID of the player's projectile texture.

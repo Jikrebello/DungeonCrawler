@@ -220,7 +220,7 @@ namespace DungeonCrawler
             if (currentTextureIndex != (int)animState)
             {
                 currentTextureIndex = (int)animState;
-                sprite.Texture = new Texture(
+                Sprite.Texture = new Texture(
                     copy: TextureManager.GetTexture(textureID: textureIDs[currentTextureIndex])
                 );
             }

@@ -28,10 +28,11 @@ namespace DungeonCrawler
             // Calculate the velocity of the object.
             _velocity = target - screenCenter;
 
-            float length = (float)Math.Sqrt(
-                d: Convert.ToDouble(value: _velocity.X * _velocity.X)
-                    + Convert.ToDouble(value: _velocity.Y * _velocity.Y)
-            );
+            float length = (float)
+                Math.Sqrt(
+                    d: Convert.ToDouble(value: _velocity.X * _velocity.X)
+                        + Convert.ToDouble(value: _velocity.Y * _velocity.Y)
+                );
             _velocity.X /= length;
             _velocity.Y /= length;
         }
@@ -43,14 +44,14 @@ namespace DungeonCrawler
         public override void Update(float deltaTime)
         {
             // Update rotation.
-            sprite.Rotation += 400f * deltaTime;
+            Sprite.Rotation += 400f * deltaTime;
 
             // Update position.
-            sprite.Position = new Vector2f(
-                x: sprite.Position.X + (_velocity.X * (500 * deltaTime)),
-                y: sprite.Position.Y + (_velocity.Y * (500 * deltaTime))
+            Sprite.Position = new Vector2f(
+                x: Sprite.Position.X + (_velocity.X * (500 * deltaTime)),
+                y: Sprite.Position.Y + (_velocity.Y * (500 * deltaTime))
             );
-            Position = sprite.Position;
+            Position = Sprite.Position;
         }
     }
 }

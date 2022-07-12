@@ -1,5 +1,6 @@
 using SFML.Graphics;
 using SFML.System;
+using System.IO;
 
 namespace DungeonCrawler
 {
@@ -321,6 +322,7 @@ namespace DungeonCrawler
         public bool LoadLevelFromFile(string fileName)
         {
             var reader = new StreamReader(stream: File.OpenRead(path: fileName));
+
             if (!reader.EndOfStream)
             {
                 while (!reader.EndOfStream)
@@ -337,9 +339,20 @@ namespace DungeonCrawler
 
                             int value = reader.Read();
 
-                            input += Convert.ToChar(value: value);
+                            if (value != -1)
+                            {
+                                input += Convert.ToChar(value: value);
+                            }
 
-                            if (!(input == "[" || input == "]" || input == "\n" || input == "\r"))
+                            if (
+                                !(
+                                    input == "["
+                                    || input == "]"
+                                    || input == "\n"
+                                    || input == "\r"
+                                    || input == ""
+                                )
+                            )
                             {
                                 input += Convert.ToChar(value: reader.Read());
 
@@ -419,11 +432,11 @@ namespace DungeonCrawler
             position.Y -= _origin.Y;
 
             // Convert to a tile position.
-            int tileColumn,
-                tileRow;
+            int tileColumn = (int)position.X / TILE_SIZE;
+            int tileRow = (int)position.Y / TILE_SIZE;
 
-            tileColumn = (int)position.X / TILE_SIZE;
-            tileRow = (int)position.Y / TILE_SIZE;
+            // tileColumn = (int)position.X / TILE_SIZE;
+            // tileRow = (int)position.Y / TILE_SIZE;
 
             return _grid[tileColumn, tileRow];
         }

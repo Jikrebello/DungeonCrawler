@@ -57,6 +57,8 @@ namespace DungeonCrawler
         {
             CanTakeDamage = true;
 
+            AimSprite = new Sprite();
+
             // Load textures
             textureIDs[(int)ANIMATION_STATE.Walk_Up] = TextureManager.AddTexture(
                 filePath: "./Resources/Textures/players/warrior/spr_warrior_walk_up.png"
@@ -85,19 +87,21 @@ namespace DungeonCrawler
 
             // Set the initial sprite
             SetSprite(
-                TextureManager.GetTexture(textureID: textureIDs[(int)ANIMATION_STATE.Walk_Up]),
+                texture: TextureManager.GetTexture(
+                    textureID: textureIDs[(int)ANIMATION_STATE.Walk_Up]
+                ),
                 isSmooth: false,
                 frames: 8,
                 frameSpeed: 12
             );
             currentTextureIndex = (int)ANIMATION_STATE.Walk_Up;
-            sprite.Origin = new Vector2f(x: 13f, y: 18f);
+            Sprite.Origin = new Vector2f(x: 13f, y: 18f);
 
             // Create the players aim-sprite
             int textureID = TextureManager.AddTexture(
                 filePath: "./Resources/Textures/ui/spr_aim.png"
             );
-            AimSprite.Texture = new Texture(TextureManager.GetTexture(textureID: textureID));
+            AimSprite.Texture = new Texture(copy: TextureManager.GetTexture(textureID: textureID));
             AimSprite.Origin = new Vector2f(x: 16.5f, y: 16.5f);
             AimSprite.Scale = new Vector2f(x: 2f, y: 2f);
 
@@ -123,32 +127,38 @@ namespace DungeonCrawler
         {
             // Get the tiles that the four corners other players are overlapping with.
             Tile[] overlappingTiles = new Tile[4];
+
             Vector2f newPosition = Position + movement;
 
             // Top left.
             overlappingTiles[0] = level.GetTile(
-                position: new Vector2f(newPosition.X - 14f, newPosition.Y - 14f)
+                position: new Vector2f(x: newPosition.X - 14f, y: newPosition.Y - 14f)
             );
 
             // Top right.
             overlappingTiles[1] = level.GetTile(
-                position: new Vector2f(newPosition.X + 14f, newPosition.Y - 14f)
+                position: new Vector2f(x: newPosition.X + 14f, y: newPosition.Y - 14f)
             );
 
             // Bottom left.
             overlappingTiles[2] = level.GetTile(
-                position: new Vector2f(newPosition.X - 14f, newPosition.Y + 14f)
+                position: new Vector2f(x: newPosition.X - 14f, y: newPosition.Y + 14f)
             );
 
             // Bottom right.
             overlappingTiles[3] = level.GetTile(
-                position: new Vector2f(newPosition.X + 14f, newPosition.Y + 14f)
+                position: new Vector2f(x: newPosition.X + 14f, y: newPosition.Y + 14f)
             );
 
             // If any of the overlapping tiles are solid there was a collision.
             for (int i = 0; i < 4; i++)
             {
-                if (level.IsSolid(overlappingTiles[i].ColumnIndex, overlappingTiles[i].RowIndex))
+                if (
+                    level.IsSolid(
+                        column: overlappingTiles[i].ColumnIndex,
+                        row: overlappingTiles[i].RowIndex
+                    )
+                )
                 {
                     return true;
                 }
@@ -173,70 +183,70 @@ namespace DungeonCrawler
             // Calculate where the current movement will put us.
             ANIMATION_STATE animState = (ANIMATION_STATE)currentTextureIndex;
 
-            // Vertical Movement
-            if (Input.IsKeyPressed(keycode: KEY.Key_Up))
-            {
-                // Set the movement speed.
-                movementSpeed.Y = -Speed * deltaTime;
-
-                // Choose animation state.
-                animState = ANIMATION_STATE.Walk_Up;
-            }
-            else if (Input.IsKeyPressed(KEY.Key_Down))
-            {
-                // Set the movement speed.
-                movementSpeed.Y = Speed * deltaTime;
-
-                // Choose animation state.
-                animState = ANIMATION_STATE.Walk_Down;
-            }
-
-            // Calculate Vertical movement.
-            if (CausesCollision(movement: new Vector2f(x: 0f, y: movementSpeed.Y), level))
-            {
-                Position = new Vector2f(x: 0f, previousPosition.Y);
-            }
-            else
-            {
-                Position += new Vector2f(x: 0f, previousPosition.Y);
-            }
-
-            // Horizontal Movement
+            // Handle Input horizontally.
             if (Input.IsKeyPressed(keycode: KEY.Key_Left))
             {
-                // Set the movement speed.
+                // Set movement speed.
                 movementSpeed.X = -Speed * deltaTime;
 
-                // Choose animation state.
+                // Chose animation state.
                 animState = ANIMATION_STATE.Walk_Left;
             }
-            else if (Input.IsKeyPressed(KEY.Key_Right))
+            else if (Input.IsKeyPressed(keycode: KEY.Key_Right))
             {
-                // Set the movement speed.
+                // Set movement speed.
                 movementSpeed.X = Speed * deltaTime;
 
-                // Choose animation state.
+                // Chose animation state.
                 animState = ANIMATION_STATE.Walk_Right;
             }
 
-            // Calculate Horizontal movement.
-            if (CausesCollision(movement: new Vector2f(x: movementSpeed.X, y: 0f), level))
+            // Handle Input vertically.
+            if (Input.IsKeyPressed(keycode: KEY.Key_Up))
             {
-                Position = new Vector2f(previousPosition.X, y: 0f);
+                // Set movement speed.
+                movementSpeed.Y = -Speed * deltaTime;
+
+                // Chose animation state.
+                animState = ANIMATION_STATE.Walk_Up;
+            }
+            else if (Input.IsKeyPressed(keycode: KEY.Key_Down))
+            {
+                // Set movement speed.
+                movementSpeed.Y = Speed * deltaTime;
+
+                // Chose animation state.
+                animState = ANIMATION_STATE.Walk_Down;
+            }
+
+            // Calculate horizontal movement.
+            if (CausesCollision(movement: new Vector2f(x: movementSpeed.X, y: 0f), level: level))
+            {
+                Position = previousPosition;
             }
             else
             {
-                Position += new Vector2f(x: previousPosition.X, y: 0f);
+                Position += new Vector2f(x: movementSpeed.X, y: Position.Y);
+            }
+
+            // Calculate vertical movement.
+            if (CausesCollision(movement: new Vector2f(x: 0f, y: movementSpeed.Y), level: level))
+            {
+                Position = previousPosition;
+            }
+            else
+            {
+                Position += new Vector2f(x: Position.X, y: movementSpeed.Y);
             }
 
             // Update the sprite position.
-            sprite.Position = Position;
+            Sprite.Position = Position;
 
             // Set the Sprite.
             if (currentTextureIndex != (int)animState)
             {
                 currentTextureIndex = (int)animState;
-                sprite.Texture = TextureManager.GetTexture(
+                Sprite.Texture = TextureManager.GetTexture(
                     textureID: textureIDs[currentTextureIndex]
                 );
             }
@@ -251,7 +261,7 @@ namespace DungeonCrawler
                     // In our enum we have 4 walking sprites followed by 4 idle sprites.
                     // Given this, we can simply add 4 to a walking sprite to get its idle counterpart.
                     currentTextureIndex += 4;
-                    sprite.Texture = TextureManager.GetTexture(
+                    Sprite.Texture = TextureManager.GetTexture(
                         textureID: textureIDs[currentTextureIndex]
                     );
 
@@ -266,7 +276,7 @@ namespace DungeonCrawler
                 {
                     // Update sprite to walking version.
                     currentTextureIndex -= 4;
-                    sprite.Texture = TextureManager.GetTexture(
+                    Sprite.Texture = TextureManager.GetTexture(
                         textureID: textureIDs[currentTextureIndex]
                     );
 
