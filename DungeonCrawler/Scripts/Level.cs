@@ -333,38 +333,38 @@ namespace DungeonCrawler
                         for (int i = 0; i < GRID_WIDTH; i++)
                         {
                             // Get the cell that we're working on.
-
                             var cell = _grid[i, j];
 
                             //Read the character. Out of 4 characters we only want 2nd and 3rd.
                             string input = "";
 
-                            input += Convert.ToChar(reader.Read());
-                            input += Convert.ToChar(value: reader.Read());
-                            input += Convert.ToChar(value: reader.Read());
-                            input += Convert.ToChar(reader.Read());
+                            int value = reader.Read();
 
-                            input = input.TrimStart('[');
-                            input = input.TrimEnd(']');
+                            input += Convert.ToChar(value: value);
 
-                            // Convert string to int.
-                            int tileID = int.Parse(input);
-
-                            // Set type, sprite and position.
-                            cell.Type = (TILE)tileID;
-                            cell.Sprite.Texture = new Texture(
-                                copy: TextureManager.GetTexture(textureID: _textureIDs[tileID])
-                            );
-                            cell.Sprite.Position = new Vector2f(
-                                x: _origin.X + (TILE_SIZE * i),
-                                y: _origin.Y + (TILE_SIZE * j)
-                            );
-
-                            // Check for entry/exit nodes.
-                            if (cell.Type == TILE.Wall_Door_Locked)
+                            if (!(input == "[" || input == "]" || input == "\n" || input == "\r"))
                             {
-                                // Save the location of the exit door.
-                                _doorTileIndices = new Vector2i(x: i, y: 0);
+                                input += Convert.ToChar(value: reader.Read());
+
+                                // Convert string to int.
+                                int tileID = int.Parse(s: input);
+
+                                // Set type, sprite and position.
+                                cell.Type = (TILE)tileID;
+                                cell.Sprite.Texture = new Texture(
+                                    copy: TextureManager.GetTexture(textureID: _textureIDs[tileID])
+                                );
+                                cell.Sprite.Position = new Vector2f(
+                                    x: _origin.X + (TILE_SIZE * i),
+                                    y: _origin.Y + (TILE_SIZE * j)
+                                );
+
+                                // Check for entry/exit nodes.
+                                if (cell.Type == TILE.Wall_Door_Locked)
+                                {
+                                    // Save the location of the exit door.
+                                    _doorTileIndices = new Vector2i(x: i, y: 0);
+                                }
                             }
                         }
                     }

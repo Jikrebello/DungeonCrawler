@@ -93,7 +93,7 @@ namespace DungeonCrawler
         /// <summary>
         /// The object's sprite.
         /// </summary>
-        internal Sprite sprite;
+        internal Sprite sprite = new();
 
         /// <summary>
         /// Creates and sets the object sprite.

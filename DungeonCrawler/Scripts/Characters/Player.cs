@@ -59,28 +59,28 @@ namespace DungeonCrawler
 
             // Load textures
             textureIDs[(int)ANIMATION_STATE.Walk_Up] = TextureManager.AddTexture(
-                filePath: "../Resources/Textures/players/warrior/spr_warrior_walk_up.png"
+                filePath: "./Resources/Textures/players/warrior/spr_warrior_walk_up.png"
             );
             textureIDs[(int)ANIMATION_STATE.Walk_Down] = TextureManager.AddTexture(
-                filePath: "../Resources/Textures/players/warrior/spr_warrior_walk_down.png"
+                filePath: "./Resources/Textures/players/warrior/spr_warrior_walk_down.png"
             );
             textureIDs[(int)ANIMATION_STATE.Walk_Right] = TextureManager.AddTexture(
-                filePath: "../Resources/Textures/players/warrior/spr_warrior_walk_right.png"
+                filePath: "./Resources/Textures/players/warrior/spr_warrior_walk_right.png"
             );
             textureIDs[(int)ANIMATION_STATE.Walk_Left] = TextureManager.AddTexture(
-                filePath: "../Resources/Textures/players/warrior/spr_warrior_walk_left.png"
+                filePath: "./Resources/Textures/players/warrior/spr_warrior_walk_left.png"
             );
             textureIDs[(int)ANIMATION_STATE.Idle_Up] = TextureManager.AddTexture(
-                filePath: "../Resources/Textures/players/warrior/spr_warrior_idle_up.png"
+                filePath: "./Resources/Textures/players/warrior/spr_warrior_idle_up.png"
             );
             textureIDs[(int)ANIMATION_STATE.Idle_Down] = TextureManager.AddTexture(
-                filePath: "../Resources/Textures/players/warrior/spr_warrior_idle_down.png"
+                filePath: "./Resources/Textures/players/warrior/spr_warrior_idle_down.png"
             );
             textureIDs[(int)ANIMATION_STATE.Idle_Right] = TextureManager.AddTexture(
-                filePath: "../Resources/Textures/players/warrior/spr_warrior_idle_right.png"
+                filePath: "./Resources/Textures/players/warrior/spr_warrior_idle_right.png"
             );
             textureIDs[(int)ANIMATION_STATE.Idle_Left] = TextureManager.AddTexture(
-                filePath: "../Resources/Textures/players/warrior/spr_warrior_idle_left.png"
+                filePath: "./Resources/Textures/players/warrior/spr_warrior_idle_left.png"
             );
 
             // Set the initial sprite
@@ -95,7 +95,7 @@ namespace DungeonCrawler
 
             // Create the players aim-sprite
             int textureID = TextureManager.AddTexture(
-                filePath: "../Resources/Textures/ui/spr_aim.png"
+                filePath: "./Resources/Textures/ui/spr_aim.png"
             );
             AimSprite.Texture = new Texture(TextureManager.GetTexture(textureID: textureID));
             AimSprite.Origin = new Vector2f(x: 16.5f, y: 16.5f);
