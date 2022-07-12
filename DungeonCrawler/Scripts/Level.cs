@@ -88,102 +88,99 @@ namespace DungeonCrawler
 
             // Load all Tiles.
             #region tile_floor
-            AddTile(
-                fileName: "../Resources/Textures/tiles/spr_tile_floor.png",
-                tileType: TILE.Floor
-            );
+            AddTile(fileName: "Resources/Textures/tiles/spr_tile_floor.png", tileType: TILE.Floor);
             #endregion
 
             #region wall_top
             AddTile(
-                fileName: "../Resources/Textures/tiles/spr_tile_wall_top.png",
+                fileName: "Resources/Textures/tiles/spr_tile_wall_top.png",
                 tileType: TILE.Wall_Top
             );
             AddTile(
-                fileName: "../Resources/Textures/tiles/spr_tile_wall_top_left.png",
+                fileName: "Resources/Textures/tiles/spr_tile_wall_top_left.png",
                 tileType: TILE.Wall_Top_Left
             );
             AddTile(
-                fileName: "../Resources/Textures/tiles/spr_tile_wall_top_right.png",
+                fileName: "Resources/Textures/tiles/spr_tile_wall_top_right.png",
                 tileType: TILE.Wall_Top_Right
             );
             AddTile(
-                fileName: "../Resources/Textures/tiles/spr_tile_wall_top_t.png",
+                fileName: "Resources/Textures/tiles/spr_tile_wall_top_t.png",
                 tileType: TILE.Wall_Top_T
             );
             AddTile(
-                fileName: "../Resources/Textures/tiles/spr_tile_wall_top_end.png",
+                fileName: "Resources/Textures/tiles/spr_tile_wall_top_end.png",
                 tileType: TILE.Wall_Top_End
             );
             #endregion
 
             #region wall_bottom
             AddTile(
-                fileName: "../Resources/Textures/tiles/spr_tile_wall_bottom_left.png",
+                fileName: "Resources/Textures/tiles/spr_tile_wall_bottom_left.png",
                 tileType: TILE.Wall_Bottom_Left
             );
             AddTile(
-                fileName: "../Resources/Textures/tiles/spr_tile_wall_bottom_right.png",
+                fileName: "Resources/Textures/tiles/spr_tile_wall_bottom_right.png",
                 tileType: TILE.Wall_Bottom_Right
             );
             AddTile(
-                fileName: "../Resources/Textures/tiles/spr_tile_wall_bottom_t.png",
+                fileName: "Resources/Textures/tiles/spr_tile_wall_bottom_t.png",
                 tileType: TILE.Wall_Bottom_T
             );
             AddTile(
-                fileName: "../Resources/Textures/tiles/spr_tile_wall_bottom_end.png",
+                fileName: "Resources/Textures/tiles/spr_tile_wall_bottom_end.png",
                 tileType: TILE.Wall_Bottom_End
             );
             #endregion
 
             #region wall_side
             AddTile(
-                fileName: "../Resources/Textures/tiles/spr_tile_wall_side.png",
+                fileName: "Resources/Textures/tiles/spr_tile_wall_side.png",
                 tileType: TILE.Wall_Side
             );
             AddTile(
-                fileName: "../Resources/Textures/tiles/spr_tile_wall_side_left_t.png",
+                fileName: "Resources/Textures/tiles/spr_tile_wall_side_left_t.png",
                 tileType: TILE.Wall_Side_Left_T
             );
             AddTile(
-                fileName: "../Resources/Textures/tiles/spr_tile_wall_side_left_end.png",
+                fileName: "Resources/Textures/tiles/spr_tile_wall_side_left_end.png",
                 tileType: TILE.Wall_Side_Left_End
             );
             AddTile(
-                fileName: "../Resources/Textures/tiles/spr_tile_wall_side_right_t.png",
+                fileName: "Resources/Textures/tiles/spr_tile_wall_side_right_t.png",
                 tileType: TILE.Wall_Side_Right_T
             );
             AddTile(
-                fileName: "../Resources/Textures/tiles/spr_tile_wall_side_right_end.png",
+                fileName: "Resources/Textures/tiles/spr_tile_wall_side_right_end.png",
                 tileType: TILE.Wall_Side_Right_End
             );
             #endregion
 
             #region wall_intersection
             AddTile(
-                fileName: "../Resources/Textures/tiles/spr_tile_wall_intersection.png",
+                fileName: "Resources/Textures/tiles/spr_tile_wall_intersection.png",
                 tileType: TILE.Wall_Intersection
             );
             AddTile(
-                fileName: "../Resources/Textures/tiles/spr_tile_wall_single.png",
+                fileName: "Resources/Textures/tiles/spr_tile_wall_single.png",
                 tileType: TILE.Wall_Single
             );
             #endregion
 
             #region wall_entrance
             AddTile(
-                fileName: "../Resources/Textures/tiles/spr_tile_wall_entrance.png",
+                fileName: "Resources/Textures/tiles/spr_tile_wall_entrance.png",
                 tileType: TILE.Wall_Entrance
             );
             #endregion
 
             #region wall_door
             AddTile(
-                fileName: "../Resources/Textures/tiles/spr_tile_door_locked.png",
+                fileName: "Resources/Textures/tiles/spr_tile_door_locked.png",
                 tileType: TILE.Wall_Door_Locked
             );
             AddTile(
-                fileName: "../Resources/Textures/tiles/spr_tile_door_unlocked.png",
+                fileName: "Resources/Textures/tiles/spr_tile_door_unlocked.png",
                 tileType: TILE.Wall_Door_Unlocked
             );
             #endregion

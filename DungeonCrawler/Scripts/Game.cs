@@ -215,7 +215,7 @@ namespace DungeonCrawler
         /// <summary>
         /// A list of all ui sprites.
         /// </summary>
-        List<Sprite> _uiSprites = new List<Sprite>();
+        List<Sprite> _uiSprites = new();
         #endregion
 
         /// <summary>
@@ -241,7 +241,7 @@ namespace DungeonCrawler
             _level = new Level(window: _window);
 
             // Create the game font.
-            _font = new Font(filename: "../Resources/fonts/ADDSBP__.TTF");
+            _font = new Font(filename: "Resources/fonts/ADDSBP__.TTF");
         }
 
         /// <summary>
@@ -254,7 +254,7 @@ namespace DungeonCrawler
 
             // Load the correct projectile texture.
             _projectileTextureID = TextureManager.AddTexture(
-                filePath: @"D:/C# Projects/DungeonCrawler/Resources/Textures/projectiles/spr_sword.png"
+                filePath: "Resources/Textures/projectiles/spr_sword.png"
             );
 
             // Initialize the UI.
@@ -269,7 +269,7 @@ namespace DungeonCrawler
             _views[(int)VIEW.UI] = _window.DefaultView;
 
             // Load the level.
-            _level.LoadLevelFromFile(fileName: "/Resources/data/level_data2.txt");
+            _level.LoadLevelFromFile(fileName: "Resources/data/level_data2.txt");
 
             // Set the position of the player.
             _player.Position = new Vector2f(x: _screenCenter.X + 197f, y: _screenCenter.Y + 410f);
@@ -288,7 +288,7 @@ namespace DungeonCrawler
             {
                 Texture = TextureManager.GetTexture(
                     textureID: TextureManager.AddTexture(
-                        filePath: @"D:/C# Projects/DungeonCrawler/Resources/Textures/ui/spr_warrior_ui.png"
+                        filePath: "Resources/Textures/ui/spr_warrior_ui.png"
                     )
                 ),
                 Position = new Vector2f(x: 45f, y: 45f),
@@ -299,7 +299,7 @@ namespace DungeonCrawler
             // Bar outlines.
             Texture barOutlineTexture = TextureManager.GetTexture(
                 textureID: TextureManager.AddTexture(
-                    filePath: @"D:/C# Projects/DungeonCrawler/Resources/Textures/ui/spr_bar_outline.png"
+                    filePath: "Resources/Textures/ui/spr_bar_outline.png"
                 )
             );
             Vector2f barOutlineTextureOrigin =
@@ -324,7 +324,7 @@ namespace DungeonCrawler
             // Bars.
             Texture healthBarTexture = TextureManager.GetTexture(
                 textureID: TextureManager.AddTexture(
-                    filePath: @"D:/C# Projects/DungeonCrawler//Resources/Textures/ui/spr_health_bar.png"
+                    filePath: "Resources/Textures/ui/spr_health_bar.png"
                 )
             );
             Vector2f barTextureOrigin =
@@ -343,7 +343,7 @@ namespace DungeonCrawler
             {
                 Texture = TextureManager.GetTexture(
                     textureID: TextureManager.AddTexture(
-                        filePath: "/Resources/Textures/ui/spr_mana_bar.png"
+                        filePath: "Resources/Textures/ui/spr_mana_bar.png"
                     )
                 ),
                 Position = new Vector2f(x: 205f, y: 55f),
@@ -355,7 +355,7 @@ namespace DungeonCrawler
             {
                 Texture = TextureManager.GetTexture(
                     textureID: TextureManager.AddTexture(
-                        filePath: "/Resources/Textures/ui/spr_gem_ui.png"
+                        filePath: "Resources/Textures/ui/spr_gem_ui.png"
                     )
                 ),
                 Position = new Vector2f(x: _screenCenter.X - 260f, y: 50f),
@@ -367,7 +367,9 @@ namespace DungeonCrawler
             _coinUISprite = new Sprite
             {
                 Texture = TextureManager.GetTexture(
-                    textureID: TextureManager.AddTexture(filePath: "/Resources/Textures/ui/")
+                    textureID: TextureManager.AddTexture(
+                        filePath: "Resources/Textures/ui/spr_coin_ui.png"
+                    )
                 ),
                 Position = new Vector2f(x: _screenCenter.X + 60f, y: 50f),
                 Origin = new Vector2f(x: 48f, y: 24f)
@@ -379,7 +381,7 @@ namespace DungeonCrawler
             {
                 Texture = TextureManager.GetTexture(
                     textureID: TextureManager.AddTexture(
-                        filePath: "/Resources/Textures/ui/spr_key_ui.png"
+                        filePath: "Resources/Textures/ui/spr_key_ui.png"
                     )
                 ),
                 Position = new Vector2f(x: _screenSize.X - 120f, y: _screenSize.Y - 70f),
@@ -390,10 +392,10 @@ namespace DungeonCrawler
 
             // Load attack stats.
             _attackStatTextureIDs[0] = TextureManager.AddTexture(
-                filePath: "/Resources/Textures/ui/spr_attack_ui.png"
+                filePath: "Resources/Textures/ui/spr_attack_ui.png"
             );
             _attackStatTextureIDs[1] = TextureManager.AddTexture(
-                filePath: "/Resources/Textures/ui/spr_attack_ui_alt.png"
+                filePath: "Resources/Textures/ui/spr_attack_ui_alt.png"
             );
 
             _attackStatSprite = new Sprite
@@ -406,10 +408,10 @@ namespace DungeonCrawler
 
             // Load defense stats.
             _defenseStatTextureIDs[0] = TextureManager.AddTexture(
-                filePath: "/Resources/Textures/ui/spr_defense_ui.png"
+                filePath: "Resources/Textures/ui/spr_defense_ui.png"
             );
             _defenseStatTextureIDs[1] = TextureManager.AddTexture(
-                filePath: "/Resources/Textures/ui/spr_defense_ui_alt.png"
+                filePath: "Resources/Textures/ui/spr_defense_ui_alt.png"
             );
 
             _defenseStatSprite = new Sprite
@@ -422,10 +424,10 @@ namespace DungeonCrawler
 
             // Load strength stats.
             _strengthStatTextureIDs[0] = TextureManager.AddTexture(
-                filePath: "/Resources/Textures/ui/spr_strength_ui.png"
+                filePath: "Resources/Textures/ui/spr_strength_ui.png"
             );
             _strengthStatTextureIDs[1] = TextureManager.AddTexture(
-                filePath: "/Resources/Textures/ui/spr_strength_ui_alt.png"
+                filePath: "Resources/Textures/ui/spr_strength_ui_alt.png"
             );
 
             _strengthStatSprite = new Sprite
@@ -438,10 +440,10 @@ namespace DungeonCrawler
 
             // Load dexterity stats.
             _dexterityStatTextureIDs[0] = TextureManager.AddTexture(
-                filePath: "/Resources/Textures/ui/spr_dexterity_ui.png"
+                filePath: "Resources/Textures/ui/spr_dexterity_ui.png"
             );
             _dexterityStatTextureIDs[1] = TextureManager.AddTexture(
-                filePath: "/Resources/Textures/ui/spr_dexterity_ui_alt.png"
+                filePath: "Resources/Textures/ui/spr_dexterity_ui_alt.png"
             );
 
             _dexterityStatSprite = new Sprite
@@ -454,10 +456,10 @@ namespace DungeonCrawler
 
             // Load stamina stats.
             _staminaStatTextureIDs[0] = TextureManager.AddTexture(
-                filePath: "/Resources/Textures/ui/spr_stamina_ui.png"
+                filePath: "Resources/Textures/ui/spr_stamina_ui.png"
             );
             _staminaStatTextureIDs[1] = TextureManager.AddTexture(
-                filePath: "/Resources/Textures/ui/spr_stamina_ui_alt.png"
+                filePath: "Resources/Textures/ui/spr_stamina_ui_alt.png"
             );
 
             _staminaStatSprite = new Sprite
@@ -816,7 +818,9 @@ namespace DungeonCrawler
         void ConstructLightGrid()
         {
             // Load the light tile texture and store a reference.
-            int textureID = TextureManager.AddTexture(filePath: "../");
+            int textureID = TextureManager.AddTexture(
+                filePath: "Resources/Textures/spr_light_grid.png"
+            );
             var lightTexture = TextureManager.GetTexture(textureID: textureID);
 
             // Calculate the number of tiles in the grid. Each light tile is 25px square.
