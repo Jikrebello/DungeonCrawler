@@ -10,9 +10,6 @@ namespace DungeonCrawler
         Game_Over
     }
 
-    /// <summary>
-    /// Spawnable Items
-    /// </summary>
     public enum ITEM
     {
         Gem,

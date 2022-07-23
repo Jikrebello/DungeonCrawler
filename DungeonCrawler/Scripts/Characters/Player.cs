@@ -88,13 +88,13 @@ namespace DungeonCrawler
             // Set the initial sprite
             SetSprite(
                 texture: TextureManager.GetTexture(
-                    textureID: textureIDs[(int)ANIMATION_STATE.Walk_Up]
+                    textureID: textureIDs[(int)ANIMATION_STATE.Walk_Down]
                 ),
                 isSmooth: false,
                 frames: 8,
                 frameSpeed: 12
             );
-            currentTextureIndex = (int)ANIMATION_STATE.Walk_Up;
+            currentTextureIndex = (int)ANIMATION_STATE.Walk_Down;
             Sprite.Origin = new Vector2f(x: 13f, y: 18f);
 
             // Create the players aim-sprite
